@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berber Paneli</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="panel-page">
+  <header class="header panel-header">
+    <nav class="nav container">
+      <a href="index.html" class="logo">Berber</a>
+      <a href="index.html" class="panel-back-link">← Müşteri Sitesi</a>
+    </nav>
+  </header>
+
+  <main class="panel-main">
+    <div class="container">
+      <section class="panel-login" id="loginSection">
+        <div class="panel-login-card">
+          <span class="section-label">Personel Girişi</span>
+          <h1>Berber Paneli</h1>
+          <p class="panel-login-desc">Randevularınızı görüntülemek için giriş yapın.</p>
+          <form id="panelLoginForm">
+            <div class="form-group">
+              <label for="panelBarber">Berber</label>
+              <select id="panelBarber" required>
+                <option value="">Berber seçin</option>
+                <option value="ahmet">Ahmet Yılmaz</option>
+                <option value="mehmet">Mehmet Kaya</option>
+                <option value="can">Can Demir</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="panelPin">PIN</label>
+              <input type="password" id="panelPin" required placeholder="PIN kodunuz" inputmode="numeric" maxlength="4">
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Giriş Yap</button>
+          </form>
+          <p class="panel-pin-hint">Demo PIN: Ahmet 1111 · Mehmet 2222 · Can 3333</p>
+        </div>
+      </section>
+
+      <section class="panel-dashboard" id="dashboardSection" hidden>
+        <div class="panel-dashboard-header">
+          <div>
+            <span class="section-label">Randevu Listesi</span>
+            <h1 id="welcomeTitle">Hoş geldin</h1>
+          </div>
+          <button type="button" class="btn btn-outline" id="logoutBtn">Çıkış Yap</button>
+        </div>
+
+        <div class="panel-stats">
+          <div class="panel-stat">
+            <span class="panel-stat-number" id="statsTotal">0</span>
+            <span class="panel-stat-label">Toplam Randevu</span>
+          </div>
+        </div>
+
+        <div class="panel-content-grid">
+          <div class="panel-calendar-wrap">
+            <div class="panel-calendar">
+              <div class="calendar-header">
+                <button type="button" class="calendar-nav" id="panelPrevMonth" aria-label="Önceki ay">‹</button>
+                <span class="calendar-title" id="panelCalendarTitle"></span>
+                <button type="button" class="calendar-nav" id="panelNextMonth" aria-label="Sonraki ay">›</button>
+              </div>
+              <div class="calendar-weekdays">
+                <span>Pzt</span>
+                <span>Sal</span>
+                <span>Çar</span>
+                <span>Per</span>
+                <span>Cum</span>
+                <span>Cmt</span>
+                <span>Paz</span>
+              </div>
+              <div class="panel-calendar-days" id="panelCalendarDays"></div>
+            </div>
+            <p class="panel-calendar-hint">Randevulu günlere tıklayarak o günün randevularını görün.</p>
+          </div>
+
+          <div class="panel-appointments-wrap">
+            <div class="panel-list-header">
+              <h2 id="selectedDayTitle">Tüm Randevular</h2>
+              <button type="button" class="btn btn-outline btn-sm" id="clearDayBtn" hidden>Tümünü Göster</button>
+            </div>
+            <p class="panel-empty" id="panelEmpty" hidden>Henüz randevunuz bulunmuyor.</p>
+            <div class="panel-list" id="panelAppointments"></div>
+
+            <div class="panel-manual-form">
+              <h2>Manuel Randevu Ekle</h2>
+              <p class="panel-manual-desc">Telefonla alınan randevuları buradan ekleyin. Eklenen saatler müşteri sitesinde dolu görünür.</p>
+              <form id="manualAppointmentForm">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="manualName">Müşteri Adı</label>
+                    <input type="text" id="manualName" required placeholder="Ad Soyad">
+                  </div>
+                  <div class="form-group">
+                    <label for="manualPhone">Telefon (isteğe bağlı)</label>
+                    <input type="tel" id="manualPhone" placeholder="05XX XXX XX XX" inputmode="tel" autocomplete="tel">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="manualService">Hizmet</label>
+                    <select id="manualService" required>
+                      <option value="">Hizmet seçin</option>
+                      <option value="sac-kesimi">Saç Kesimi — ₺250</option>
+                      <option value="sakal-tirasi">Sakal Tıraşı — ₺150</option>
+                      <option value="sac-sakal">Saç + Sakal — ₺350</option>
+                      <option value="cilt-bakimi">Cilt Bakımı — ₺200</option>
+                    </select>
+                  </div>
+                  <div class="form-group date-picker">
+                    <label for="manualDate">Tarih</label>
+                    <div class="date-picker-wrap" id="manualDatePicker">
+                      <button type="button" class="date-picker-trigger" id="manualDateTrigger" aria-haspopup="dialog" aria-expanded="false">
+                        <span class="date-picker-value placeholder" id="manualDateDisplay">Tarih seçin</span>
+                        <span class="date-picker-icon" aria-hidden="true">📅</span>
+                      </button>
+                      <input type="hidden" id="manualDate" name="manualDate" required>
+                      <div class="calendar-popup" id="manualCalendarPopup" hidden>
+                        <div class="calendar-header">
+                          <button type="button" class="calendar-nav" id="manualPrevMonth" aria-label="Önceki ay">‹</button>
+                          <span class="calendar-title" id="manualCalendarTitle"></span>
+                          <button type="button" class="calendar-nav" id="manualNextMonth" aria-label="Sonraki ay">›</button>
+                        </div>
+                        <div class="calendar-weekdays">
+                          <span>Pzt</span>
+                          <span>Sal</span>
+                          <span>Çar</span>
+                          <span>Per</span>
+                          <span>Cum</span>
+                          <span>Cmt</span>
+                          <span>Paz</span>
+                        </div>
+                        <div class="calendar-days" id="manualCalendarDays"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="manualTime">Saat</label>
+                  <select id="manualTime" required>
+                    <option value="">Saat seçin</option>
+                  </select>
+                  <p class="field-hint" id="manualTimeHint">Önce tarih seçin.</p>
+                </div>
+                <div class="form-group">
+                  <label for="manualNote">Not (isteğe bağlı)</label>
+                  <textarea id="manualNote" rows="2" placeholder="Telefonla alınan randevu notu..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Randevu Ekle</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="src/panel-main.js"></script>
+</body>
+</html>
