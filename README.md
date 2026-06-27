@@ -10,7 +10,7 @@ Erkek kuaförü / berber dükkanları için geliştirilmiş, Türkçe arayüzlü
 - **Hizmetler** — Saç kesimi, sakal tıraşı vb. fiyat listesi
 - **Randevu oluşturma** — Berber, hizmet, açılır takvim, saat seçimi
 - **Randevu sorgulama** — Ad ve telefon ile randevuları görüntüleme ve iptal etme
-- **İletişim** — Adres, telefon, mesaj formu
+- **İletişim** — Adres, telefon, e-posta, çalışma saatleri
 - Dolu saatler otomatik işaretlenir; aynı berber + tarih + saat tekrar alınamaz
 - Geçmiş randevular otomatik silinir
 
@@ -104,7 +104,7 @@ Sunucu çalışırken tarayıcıda şu adreslere gidin:
 
 1. Müşteri sitesinden bir randevu oluşturun
 2. **Randevularım** bölümünden ad ve telefon ile sorgulayın
-3. Footer'daki **Berber Paneli** linkinden panele girin (demo PIN: `1111`)
+3. Footer'daki **Berber Paneli** linkinden panele girin (ör. Mehmet İmrek — PIN: `1111`)
 
 ### Sık karşılaşılan sorunlar
 
@@ -116,11 +116,11 @@ Sunucu çalışırken tarayıcıda şu adreslere gidin:
 
 ## Berber paneli giriş bilgileri (demo)
 
-| Berber        | PIN  |
-|---------------|------|
-| Ahmet Yılmaz  | 1111 |
-| Mehmet Kaya   | 2222 |
-| Can Demir     | 3333 |
+| Berber          | PIN  |
+|-----------------|------|
+| Mehmet İmrek    | 1111 |
+| Hikmet Görmez   | 2222 |
+| Ramazan Hamza   | 3333 |
 
 PIN kodları `src/config/constants.js` dosyasındaki `BARBER_PINS` alanından değiştirilebilir.
 
@@ -172,7 +172,9 @@ Proje katmanlı ve desen odaklı yapılandırılmıştır:
 - `BARBER_PINS` — Panel giriş PIN'leri
 - `TIME_SLOTS` — Çalışma saatleri (09:00–19:00)
 
-Dükkan adı, adres, telefon ve fiyatlar `index.html` içinden düzenlenebilir.
+Dükkan adı, adres, telefon ve fiyatlar `index.html` içinden düzenlenebilir. Berber adları `src/config/constants.js` dosyasındaki `BARBER_LABELS` alanından güncellenir.
+
+**Dükkan adresi:** Maslak Mahallesi, Çınar Sokak, No: 1, Sarıyer / İstanbul
 
 ## Önemli notlar
 

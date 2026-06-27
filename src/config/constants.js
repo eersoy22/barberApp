@@ -18,15 +18,15 @@ export const SERVICE_LABELS = {
 };
 
 export const BARBER_LABELS = {
-  ahmet: 'Ahmet Yılmaz',
-  mehmet: 'Mehmet Kaya',
-  can: 'Can Demir',
+  mehmet: 'Mehmet İmrek',
+  hikmet: 'Hikmet Görmez',
+  ramazan: 'Ramazan Hamza',
 };
 
 export const BARBER_PINS = {
-  ahmet: '1111',
-  mehmet: '2222',
-  can: '3333',
+  mehmet: '1111',
+  hikmet: '2222',
+  ramazan: '3333',
 };
 
 export const SESSION_KEY = 'barberPanelSession';

@@ -18,7 +18,6 @@ import { NavigationView } from './ui/NavigationView.js';
 import { DatePickerView } from './ui/DatePickerView.js';
 import { TimeSlotView } from './ui/TimeSlotView.js';
 import { AppointmentFormController } from './ui/AppointmentFormController.js';
-import { ContactFormController } from './ui/ContactFormController.js';
 import { AppointmentLookupView } from './ui/AppointmentLookupView.js';
 import { AppointmentLookupController } from './ui/AppointmentLookupController.js';
 
@@ -86,11 +85,6 @@ function bootstrap() {
     bookingFacade,
     toastView,
     eventBus,
-  );
-
-  new ContactFormController(
-    document.getElementById('contactForm'),
-    toastView,
   );
 
   new AppointmentLookupController(
