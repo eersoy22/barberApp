@@ -1,5 +1,5 @@
-import { DateUtils } from '../utils/DateUtils.js';
-import { i18n } from '../i18n/I18n.js';
+import { DateUtils } from '../../utils/DateUtils.js';
+import { i18n } from '../../i18n/I18n.js';
 
 /**
  * Berber paneli için aylık takvim görünümü.

@@ -15,14 +15,14 @@ import {
 import { EventBus } from './patterns/EventBus.js';
 import { APP_EVENTS } from './config/constants.js';
 import { i18n } from './i18n/I18n.js';
-import { ToastView } from './ui/ToastView.js';
-import { NavigationView } from './ui/NavigationView.js';
-import { DatePickerView } from './ui/DatePickerView.js';
-import { TimeSlotView } from './ui/TimeSlotView.js';
-import { AppointmentFormController } from './ui/AppointmentFormController.js';
-import { AppointmentLookupView } from './ui/AppointmentLookupView.js';
-import { AppointmentLookupController } from './ui/AppointmentLookupController.js';
-import { I18nView } from './ui/I18nView.js';
+import { ToastView } from './presentation/views/ToastView.js';
+import { NavigationView } from './presentation/views/NavigationView.js';
+import { DatePickerView } from './presentation/views/DatePickerView.js';
+import { TimeSlotView } from './presentation/views/TimeSlotView.js';
+import { AppointmentFormController } from './presentation/controllers/AppointmentFormController.js';
+import { AppointmentLookupView } from './presentation/views/AppointmentLookupView.js';
+import { AppointmentLookupController } from './presentation/controllers/AppointmentLookupController.js';
+import { I18nView } from './presentation/views/I18nView.js';
 
 /**
  * Composition Root — bağımlılıkları bir araya getirir.

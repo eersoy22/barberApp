@@ -1,4 +1,4 @@
-import { i18n } from '../i18n/I18n.js';
+import { i18n } from '../../i18n/I18n.js';
 
 const TR_LABELS = {
   selectTime: 'Saat seçin',

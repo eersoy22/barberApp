@@ -188,14 +188,26 @@ barberApp/
     ├── infrastructure/
     ├── patterns/
     ├── validation/
-    ├── ui/
+    ├── presentation/       # MVC — presentation layer
+    │   ├── views/          # View (DOM, render)
+    │   └── controllers/    # Controller (event flow)
     └── utils/
         └── DateUtils.js
 ```
 
-## Architecture (GOF & GRASP)
+## Architecture (MVC, GOF & GRASP)
 
-The project uses a layered, pattern-oriented structure. The UI layer separates `*View.js` (presentation) from `*Controller.js` (event flow).
+The project uses a layered, pattern-oriented structure. Dependencies are wired in `main.js` and `panel-main.js` (**Composition Root**).
+
+### MVC layers
+
+| Layer | Folder | Responsibility |
+|-------|--------|----------------|
+| **Model** | `domain/` | `Appointment`, `TimeSlot` — data and domain logic |
+| **View** | `presentation/views/` | DOM rendering (`*View.js`) |
+| **Controller** | `presentation/controllers/` | User events, facade calls (`*Controller.js`) |
+
+Business rules live in `application/` (Service, Facade), not in the Model. Controllers never access the repository directly.
 
 ### GOF (Gang of Four)
 

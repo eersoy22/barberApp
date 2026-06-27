@@ -1,6 +1,6 @@
-import { MONTHS } from '../config/constants.js';
-import { DateUtils } from '../utils/DateUtils.js';
-import { i18n } from '../i18n/I18n.js';
+import { MONTHS } from '../../config/constants.js';
+import { DateUtils } from '../../utils/DateUtils.js';
+import { i18n } from '../../i18n/I18n.js';
 
 export class DatePickerView {
   constructor(elements, onDateChange, options = {}) {

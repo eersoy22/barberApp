@@ -194,14 +194,26 @@ barberApp/
     ├── infrastructure/     # Repository (localStorage)
     ├── patterns/           # Factory, Observer (EventBus)
     ├── validation/         # Strategy, Composite doğrulama
-    ├── ui/                 # View ve Controller bileşenleri
+    ├── presentation/       # MVC — sunum katmanı
+    │   ├── views/          # View (DOM, render)
+    │   └── controllers/    # Controller (olay akışı)
     └── utils/
         └── DateUtils.js
 ```
 
-## Mimari (GOF & GRASP)
+## Mimari (MVC, GOF & GRASP)
 
-Proje katmanlı ve desen odaklı yapılandırılmıştır.
+Proje katmanlı ve desen odaklı yapılandırılmıştır. Bağımlılıklar `main.js` ve `panel-main.js` içinde birleştirilir (**Composition Root**).
+
+### MVC katmanları
+
+| Katman | Klasör | Sorumluluk |
+|--------|--------|------------|
+| **Model** | `domain/` | `Appointment`, `TimeSlot` — veri ve domain mantığı |
+| **View** | `presentation/views/` | DOM gösterme, render (`*View.js`) |
+| **Controller** | `presentation/controllers/` | Kullanıcı olayları, facade çağrısı (`*Controller.js`) |
+
+İş kuralları Model’de değil; `application/` katmanındaki Service ve Facade sınıflarında tutulur. Controller doğrudan repository’ye erişmez.
 
 ### GOF (Gang of Four)
 

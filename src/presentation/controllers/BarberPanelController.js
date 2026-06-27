@@ -1,6 +1,6 @@
-import { APP_EVENTS } from '../config/constants.js';
-import { DateUtils } from '../utils/DateUtils.js';
-import { i18n } from '../i18n/I18n.js';
+import { APP_EVENTS } from '../../config/constants.js';
+import { DateUtils } from '../../utils/DateUtils.js';
+import { i18n } from '../../i18n/I18n.js';
 
 /**
  * GRASP — Controller
