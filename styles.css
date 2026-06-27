@@ -1299,6 +1299,10 @@ body {
   color: var(--text-muted);
 }
 
+.panel-cancel-btn {
+  margin-top: 1rem;
+}
+
 .footer-staff-link {
   color: var(--text-muted);
   text-decoration: none;

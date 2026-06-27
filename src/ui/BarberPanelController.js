@@ -1,4 +1,5 @@
 import { APP_EVENTS } from '../config/constants.js';
+import { DateUtils } from '../utils/DateUtils.js';
 import { i18n } from '../i18n/I18n.js';
 
 /**
@@ -79,6 +80,30 @@ export class BarberPanelController {
       return;
     }
 
-    this.view.renderAppointments(result.appointments, this.view.selectedDate);
+    this.view.renderAppointments(
+      result.appointments,
+      this.view.selectedDate,
+      (id) => this.handleCancel(id),
+    );
+  }
+
+  handleCancel(appointmentId) {
+    const confirmed = window.confirm(i18n.t('lookup.cancelConfirm'));
+    if (!confirmed) return;
+
+    const result = this.facade.cancelAppointment(appointmentId);
+
+    if (!result.success) {
+      this.toastView.show(result.message);
+      return;
+    }
+
+    const dateLabel = DateUtils.formatDisplayFromIso(result.appointment.date);
+    this.toastView.show(i18n.t('lookup.cancelled', {
+      date: dateLabel,
+      time: result.appointment.time,
+    }));
+    this.loadAppointments();
+    this.manualAppointmentController?.refreshTimeSlots();
   }
 }

@@ -1,4 +1,5 @@
-import { BARBER_LABELS, BARBER_PINS, SESSION_KEY } from '../config/constants.js';
+import { BARBER_LABELS, BARBER_PINS, SESSION_KEY, APP_EVENTS } from '../config/constants.js';
+import { EventBus } from '../patterns/EventBus.js';
 import { i18n } from '../i18n/I18n.js';
 
 /**
@@ -6,8 +7,9 @@ import { i18n } from '../i18n/I18n.js';
  * Berber paneli iş kuralları.
  */
 export class BarberPanelService {
-  constructor(repository) {
+  constructor(repository, eventBus = EventBus.getInstance()) {
     this.repository = repository;
+    this.eventBus = eventBus;
   }
 
   login(barberId, pin) {
@@ -46,6 +48,23 @@ export class BarberPanelService {
 
   getAppointments(barberId) {
     return this.repository.findByBarberId(barberId);
+  }
+
+  cancelAppointment(appointmentId, barberId) {
+    const appointment = this.repository.findById(appointmentId);
+    if (!appointment) {
+      return { success: false, message: i18n.t('validation.appointmentNotFound') };
+    }
+
+    if (appointment.getBarberId() !== barberId) {
+      return { success: false, message: i18n.t('validation.cancelForbidden') };
+    }
+
+    this.repository.deleteById(appointmentId);
+    this.eventBus.publish(APP_EVENTS.APPOINTMENT_CANCELLED, appointment);
+    this.eventBus.publish(APP_EVENTS.APPOINTMENTS_CHANGED, null);
+
+    return { success: true, appointment };
   }
 }
 
@@ -90,5 +109,14 @@ export class BarberPanelFacade {
       ...formData,
       barberId: session.barberId,
     });
+  }
+
+  cancelAppointment(appointmentId) {
+    const session = this.panelService.getSession();
+    if (!session) {
+      return { success: false, message: i18n.t('validation.sessionNotFound') };
+    }
+
+    return this.panelService.cancelAppointment(appointmentId, session.barberId);
   }
 }

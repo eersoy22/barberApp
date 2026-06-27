@@ -17,6 +17,7 @@ export class BarberPanelView {
     this.allAppointments = [];
     this.selectedDate = null;
     this.currentBarberName = '';
+    this.onCancel = null;
   }
 
   showLogin() {
@@ -32,7 +33,8 @@ export class BarberPanelView {
     this.welcomeTitle.textContent = i18n.t('panel.welcome', { name: barberName });
   }
 
-  renderAppointments(appointments, selectedDate = null) {
+  renderAppointments(appointments, selectedDate = null, onCancel = null) {
+    this.onCancel = onCancel ?? this.onCancel;
     this.allAppointments = appointments;
     this.selectedDate = selectedDate;
 
@@ -105,7 +107,14 @@ export class BarberPanelView {
           <li><span>${i18n.t('panel.service')}</span><strong>${this.escapeHtml(serviceLabel)}</strong></li>
         </ul>
         ${appointment.note ? `<p class="panel-card-note">${i18n.t('panel.note')}: ${this.escapeHtml(appointment.note)}</p>` : ''}
+        ${!isPast ? `<button type="button" class="btn btn-cancel panel-cancel-btn">${i18n.t('lookup.cancelBtn')}</button>` : ''}
       `;
+
+      if (!isPast) {
+        card.querySelector('.panel-cancel-btn').addEventListener('click', () => {
+          if (this.onCancel) this.onCancel(appointment.id);
+        });
+      }
 
       this.appointmentsContainer.appendChild(card);
     });
@@ -123,7 +132,7 @@ export class BarberPanelView {
       this.welcomeTitle.textContent = i18n.t('panel.welcome', { name: this.currentBarberName });
     }
     if (this.allAppointments.length > 0) {
-      this.renderAppointments(this.allAppointments, this.selectedDate);
+      this.renderAppointments(this.allAppointments, this.selectedDate, this.onCancel);
     } else {
       this.updateListTitle();
     }
