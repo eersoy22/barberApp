@@ -6,11 +6,15 @@
   <title>Berber Paneli</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="panel-page">
+<body class="panel-page" data-page-title-key="meta.panelTitle">
   <header class="header panel-header">
     <nav class="nav container">
       <a href="index.html" class="logo">Berber</a>
-      <a href="index.html" class="panel-back-link">← Müşteri Sitesi</a>
+      <div class="lang-switch" id="langSwitch" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="tr">TR</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="index.html" class="panel-back-link" data-i18n="nav.customerSite">← Müşteri Sitesi</a>
     </nav>
   </header>
 
@@ -18,14 +22,14 @@
     <div class="container">
       <section class="panel-login" id="loginSection">
         <div class="panel-login-card">
-          <span class="section-label">Personel Girişi</span>
-          <h1>Berber Paneli</h1>
-          <p class="panel-login-desc">Randevularınızı görüntülemek için giriş yapın.</p>
+          <span class="section-label" data-i18n="panel.loginLabel">Personel Girişi</span>
+          <h1 data-i18n="panel.title">Berber Paneli</h1>
+          <p class="panel-login-desc" data-i18n="panel.loginDesc">Randevularınızı görüntülemek için giriş yapın.</p>
           <form id="panelLoginForm">
             <div class="form-group">
-              <label for="panelBarber">Berber</label>
+              <label for="panelBarber" data-i18n="appointment.barber">Berber</label>
               <select id="panelBarber" required>
-                <option value="">Berber seçin</option>
+                <option value="" data-i18n-value="appointment.selectBarber">Berber seçin</option>
                 <option value="mehmet">Mehmet İmrek</option>
                 <option value="hikmet">Hikmet Görmez</option>
                 <option value="ramazan">Ramazan Hamza</option>
@@ -33,27 +37,27 @@
             </div>
             <div class="form-group">
               <label for="panelPin">PIN</label>
-              <input type="password" id="panelPin" required placeholder="PIN kodunuz" inputmode="numeric" maxlength="4">
+              <input type="password" id="panelPin" required data-i18n-placeholder="panel.pinPlaceholder" placeholder="PIN kodunuz" inputmode="numeric" maxlength="4">
             </div>
-            <button type="submit" class="btn btn-primary btn-full">Giriş Yap</button>
+            <button type="submit" class="btn btn-primary btn-full" data-i18n="panel.loginBtn">Giriş Yap</button>
           </form>
-          <p class="panel-pin-hint">Demo PIN: Mehmet 1111 · Hikmet 2222 · Ramazan 3333</p>
+          <p class="panel-pin-hint" data-i18n="panel.pinHint">Demo PIN: Mehmet 1111 · Hikmet 2222 · Ramazan 3333</p>
         </div>
       </section>
 
       <section class="panel-dashboard" id="dashboardSection" hidden>
         <div class="panel-dashboard-header">
           <div>
-            <span class="section-label">Randevu Listesi</span>
+            <span class="section-label" data-i18n="panel.listLabel">Randevu Listesi</span>
             <h1 id="welcomeTitle">Hoş geldin</h1>
           </div>
-          <button type="button" class="btn btn-outline" id="logoutBtn">Çıkış Yap</button>
+          <button type="button" class="btn btn-outline" id="logoutBtn" data-i18n="panel.logout">Çıkış Yap</button>
         </div>
 
         <div class="panel-stats">
           <div class="panel-stat">
             <span class="panel-stat-number" id="statsTotal">0</span>
-            <span class="panel-stat-label">Toplam Randevu</span>
+            <span class="panel-stat-label" data-i18n="panel.totalAppointments">Toplam Randevu</span>
           </div>
         </div>
 
@@ -61,59 +65,59 @@
           <div class="panel-calendar-wrap">
             <div class="panel-calendar">
               <div class="calendar-header">
-                <button type="button" class="calendar-nav" id="panelPrevMonth" aria-label="Önceki ay">‹</button>
+                <button type="button" class="calendar-nav" id="panelPrevMonth" data-i18n-aria-label="calendar.prevMonth" aria-label="Önceki ay">‹</button>
                 <span class="calendar-title" id="panelCalendarTitle"></span>
-                <button type="button" class="calendar-nav" id="panelNextMonth" aria-label="Sonraki ay">›</button>
+                <button type="button" class="calendar-nav" id="panelNextMonth" data-i18n-aria-label="calendar.nextMonth" aria-label="Sonraki ay">›</button>
               </div>
               <div class="calendar-weekdays">
-                <span>Pzt</span>
-                <span>Sal</span>
-                <span>Çar</span>
-                <span>Per</span>
-                <span>Cum</span>
-                <span>Cmt</span>
-                <span>Paz</span>
+                <span data-i18n-weekday="0">Pzt</span>
+                <span data-i18n-weekday="1">Sal</span>
+                <span data-i18n-weekday="2">Çar</span>
+                <span data-i18n-weekday="3">Per</span>
+                <span data-i18n-weekday="4">Cum</span>
+                <span data-i18n-weekday="5">Cmt</span>
+                <span data-i18n-weekday="6">Paz</span>
               </div>
               <div class="panel-calendar-days" id="panelCalendarDays"></div>
             </div>
-            <p class="panel-calendar-hint">Randevulu günlere tıklayarak o günün randevularını görün.</p>
+            <p class="panel-calendar-hint" data-i18n="panel.calendarHint">Randevulu günlere tıklayarak o günün randevularını görün.</p>
           </div>
 
           <div class="panel-appointments-wrap">
             <div class="panel-list-header">
               <h2 id="selectedDayTitle">Tüm Randevular</h2>
-              <button type="button" class="btn btn-outline btn-sm" id="clearDayBtn" hidden>Tümünü Göster</button>
+              <button type="button" class="btn btn-outline btn-sm" id="clearDayBtn" hidden data-i18n="panel.showAll">Tümünü Göster</button>
             </div>
             <p class="panel-empty" id="panelEmpty" hidden>Henüz randevunuz bulunmuyor.</p>
             <div class="panel-list" id="panelAppointments"></div>
 
             <div class="panel-manual-form">
-              <h2>Manuel Randevu Ekle</h2>
-              <p class="panel-manual-desc">Telefonla alınan randevuları buradan ekleyin. Eklenen saatler müşteri sitesinde dolu görünür.</p>
+              <h2 data-i18n="panel.manualTitle">Manuel Randevu Ekle</h2>
+              <p class="panel-manual-desc" data-i18n="panel.manualDesc">Telefonla alınan randevuları buradan ekleyin. Eklenen saatler müşteri sitesinde dolu görünür.</p>
               <form id="manualAppointmentForm">
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="manualName">Müşteri Adı</label>
-                    <input type="text" id="manualName" required placeholder="Ad Soyad">
+                    <label for="manualName" data-i18n="panel.customerName">Müşteri Adı</label>
+                    <input type="text" id="manualName" required data-i18n-placeholder="appointment.namePlaceholder" placeholder="Ad Soyad">
                   </div>
                   <div class="form-group">
-                    <label for="manualPhone">Telefon (isteğe bağlı)</label>
-                    <input type="tel" id="manualPhone" placeholder="05XX XXX XX XX" inputmode="tel" autocomplete="tel">
+                    <label for="manualPhone" data-i18n="panel.phoneOptional">Telefon (isteğe bağlı)</label>
+                    <input type="tel" id="manualPhone" data-i18n-placeholder="appointment.phonePlaceholder" placeholder="05XX XXX XX XX" inputmode="tel" autocomplete="tel">
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="manualService">Hizmet</label>
+                    <label for="manualService" data-i18n="appointment.service">Hizmet</label>
                     <select id="manualService" required>
-                      <option value="">Hizmet seçin</option>
-                      <option value="sac-kesimi">Saç Kesimi — ₺250</option>
-                      <option value="sakal-tirasi">Sakal Tıraşı — ₺150</option>
-                      <option value="sac-sakal">Saç + Sakal — ₺350</option>
-                      <option value="cilt-bakimi">Cilt Bakımı — ₺200</option>
+                      <option value="" data-i18n-value="appointment.selectService">Hizmet seçin</option>
+                      <option value="sac-kesimi" data-i18n-option="sac-kesimi">Saç Kesimi — ₺250</option>
+                      <option value="sakal-tirasi" data-i18n-option="sakal-tirasi">Sakal Tıraşı — ₺150</option>
+                      <option value="sac-sakal" data-i18n-option="sac-sakal">Saç + Sakal — ₺350</option>
+                      <option value="cilt-bakimi" data-i18n-option="cilt-bakimi">Cilt Bakımı — ₺200</option>
                     </select>
                   </div>
                   <div class="form-group date-picker">
-                    <label for="manualDate">Tarih</label>
+                    <label for="manualDate" data-i18n="appointment.date">Tarih</label>
                     <div class="date-picker-wrap" id="manualDatePicker">
                       <button type="button" class="date-picker-trigger" id="manualDateTrigger" aria-haspopup="dialog" aria-expanded="false">
                         <span class="date-picker-value placeholder" id="manualDateDisplay">Tarih seçin</span>
@@ -122,18 +126,18 @@
                       <input type="hidden" id="manualDate" name="manualDate" required>
                       <div class="calendar-popup" id="manualCalendarPopup" hidden>
                         <div class="calendar-header">
-                          <button type="button" class="calendar-nav" id="manualPrevMonth" aria-label="Önceki ay">‹</button>
+                          <button type="button" class="calendar-nav" id="manualPrevMonth" data-i18n-aria-label="calendar.prevMonth" aria-label="Önceki ay">‹</button>
                           <span class="calendar-title" id="manualCalendarTitle"></span>
-                          <button type="button" class="calendar-nav" id="manualNextMonth" aria-label="Sonraki ay">›</button>
+                          <button type="button" class="calendar-nav" id="manualNextMonth" data-i18n-aria-label="calendar.nextMonth" aria-label="Sonraki ay">›</button>
                         </div>
                         <div class="calendar-weekdays">
-                          <span>Pzt</span>
-                          <span>Sal</span>
-                          <span>Çar</span>
-                          <span>Per</span>
-                          <span>Cum</span>
-                          <span>Cmt</span>
-                          <span>Paz</span>
+                          <span data-i18n-weekday="0">Pzt</span>
+                          <span data-i18n-weekday="1">Sal</span>
+                          <span data-i18n-weekday="2">Çar</span>
+                          <span data-i18n-weekday="3">Per</span>
+                          <span data-i18n-weekday="4">Cum</span>
+                          <span data-i18n-weekday="5">Cmt</span>
+                          <span data-i18n-weekday="6">Paz</span>
                         </div>
                         <div class="calendar-days" id="manualCalendarDays"></div>
                       </div>
@@ -141,17 +145,17 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="manualTime">Saat</label>
+                  <label for="manualTime" data-i18n="appointment.time">Saat</label>
                   <select id="manualTime" required>
-                    <option value="">Saat seçin</option>
+                    <option value="" data-i18n-value="appointment.selectTime">Saat seçin</option>
                   </select>
-                  <p class="field-hint" id="manualTimeHint">Önce tarih seçin.</p>
+                  <p class="field-hint" id="manualTimeHint" data-i18n="appointment.selectDateFirst">Önce tarih seçin.</p>
                 </div>
                 <div class="form-group">
-                  <label for="manualNote">Not (isteğe bağlı)</label>
-                  <textarea id="manualNote" rows="2" placeholder="Telefonla alınan randevu notu..."></textarea>
+                  <label for="manualNote" data-i18n="panel.noteOptional">Not (isteğe bağlı)</label>
+                  <textarea id="manualNote" rows="2" data-i18n-placeholder="panel.manualNotePlaceholder" placeholder="Telefonla alınan randevu notu..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full">Randevu Ekle</button>
+                <button type="submit" class="btn btn-primary btn-full" data-i18n="panel.addAppointment">Randevu Ekle</button>
               </form>
             </div>
           </div>
@@ -162,6 +166,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <script type="module" src="src/panel-main.js"></script>
+  <script type="module" src="src/panel-main.js?v=2"></script>
 </body>
 </html>

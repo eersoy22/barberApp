@@ -13,6 +13,8 @@ import {
   LookupFieldsValidation,
 } from './validation/ValidationStrategy.js';
 import { EventBus } from './patterns/EventBus.js';
+import { APP_EVENTS } from './config/constants.js';
+import { i18n } from './i18n/I18n.js';
 import { ToastView } from './ui/ToastView.js';
 import { NavigationView } from './ui/NavigationView.js';
 import { DatePickerView } from './ui/DatePickerView.js';
@@ -20,6 +22,7 @@ import { TimeSlotView } from './ui/TimeSlotView.js';
 import { AppointmentFormController } from './ui/AppointmentFormController.js';
 import { AppointmentLookupView } from './ui/AppointmentLookupView.js';
 import { AppointmentLookupController } from './ui/AppointmentLookupController.js';
+import { I18nView } from './ui/I18nView.js';
 
 /**
  * Composition Root — bağımlılıkları bir araya getirir.
@@ -27,6 +30,12 @@ import { AppointmentLookupController } from './ui/AppointmentLookupController.js
 function bootstrap() {
   const repository = LocalStorageAppointmentRepository.getInstance();
   const eventBus = EventBus.getInstance();
+
+  new I18nView(document.getElementById('langSwitch'), () => {
+    eventBus.publish(APP_EVENTS.LANGUAGE_CHANGED);
+  });
+  document.documentElement.lang = i18n.getLocale();
+  i18n.applyPage();
 
   const validator = new CompositeValidator([
     new RequiredFieldsValidation(),
@@ -98,7 +107,13 @@ function bootstrap() {
     ),
     bookingFacade,
     toastView,
+    eventBus,
   );
+
+  i18n.onChange(() => {
+    datePicker.rerender();
+    timeSlotView.rerender();
+  });
 
   window.addEventListener('scroll', () => {
     const header = document.getElementById('header');

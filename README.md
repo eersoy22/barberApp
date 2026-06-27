@@ -1,6 +1,8 @@
 # Berber — Randevu Sistemi
 
-Erkek kuaförü / berber dükkanları için geliştirilmiş, Türkçe arayüzlü bir randevu yönetim sitesi. Müşteriler online randevu alabilir; berberler ayrı panelden randevularını görüntüleyebilir ve telefonla alınan randevuları manuel ekleyebilir.
+> **English:** This repository includes a barber shop appointment system (customer site + barber panel). For the full English documentation, open **[docs/README.en.md](docs/README.en.md)**.
+
+Erkek kuaförü / berber dükkanları için geliştirilmiş randevu yönetim sitesi. **TR / EN** dil desteği (müşteri sitesi ve berber paneli). Müşteriler online randevu alabilir; berberler ayrı panelden randevularını görüntüleyebilir ve telefonla alınan randevuları manuel ekleyebilir.
 
 ## Ekran görüntüleri
 
@@ -41,12 +43,14 @@ Erkek kuaförü / berber dükkanları için geliştirilmiş, Türkçe arayüzlü
 - **Randevu oluşturma** — Berber, hizmet, açılır takvim, saat seçimi
 - **Randevu sorgulama** — Ad ve telefon ile randevuları görüntüleme ve iptal etme
 - **İletişim** — Adres, telefon, e-posta, çalışma saatleri
+- **TR / EN** dil seçici (müşteri sitesi ve berber paneli)
 - Dolu saatler otomatik işaretlenir; aynı berber + tarih + saat tekrar alınamaz
 - Geçmiş randevular otomatik silinir
 
 ### Berber paneli (`berber-panel.html`)
 
 - PIN ile berber girişi
+- **TR / EN** dil seçici (müşteri sitesi ile aynı tercih paylaşılır)
 - Aylık **takvim** görünümü (randevulu günler işaretli)
 - Randevu listesi (güne göre filtreleme)
 - **Manuel randevu ekleme** (telefonla alınan randevular için)
@@ -162,11 +166,13 @@ barberApp/
 ├── berber-panel.html       # Berber paneli
 ├── styles.css              # Ortak stiller
 ├── docs/
+│   ├── README.en.md        # İngilizce dokümantasyon
 │   └── screenshots/        # README ekran görüntüleri
 ├── README.md
 └── src/
     ├── main.js             # Müşteri sitesi giriş noktası
     ├── panel-main.js       # Berber paneli giriş noktası
+    ├── i18n/               # TR/EN çeviriler (müşteri sitesi + berber paneli)
     ├── config/
     │   └── constants.js    # Sabitler, berber PIN'leri
     ├── domain/             # Domain modelleri

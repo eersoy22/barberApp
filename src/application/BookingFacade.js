@@ -2,6 +2,7 @@ import { TIME_SLOTS, APP_EVENTS } from '../config/constants.js';
 import { TimeSlot } from '../domain/TimeSlot.js';
 import { AppointmentFactory } from '../patterns/AppointmentFactory.js';
 import { EventBus } from '../patterns/EventBus.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Pure Fabrication
@@ -86,11 +87,11 @@ export class AppointmentLookupService {
 
     const appointment = this.repository.findById(id);
     if (!appointment) {
-      return { success: false, message: 'Randevu bulunamadı.' };
+      return { success: false, message: i18n.t('validation.appointmentNotFound') };
     }
 
     if (!appointment.matchesCustomer(name, phone)) {
-      return { success: false, message: 'Bu randevuyu iptal etme yetkiniz yok.' };
+      return { success: false, message: i18n.t('validation.cancelForbidden') };
     }
 
     this.repository.deleteById(id);
@@ -120,30 +121,34 @@ export class BookingFacade {
     return this.availabilityService.getTimeSlots(date, barberId);
   }
 
+  getAvailableCount(date, barberId) {
+    return this.availabilityService.getAvailableCount(date, barberId);
+  }
+
   getAvailabilityHint(date, barberId) {
     if (!date || !barberId) {
-      return 'Önce berber ve tarih seçin.';
+      return i18n.t('appointment.selectBarberDate');
     }
 
     const availableCount = this.availabilityService.getAvailableCount(date, barberId);
 
     if (availableCount === 0) {
-      return 'Bu berber için seçilen günde müsait saat kalmadı.';
+      return i18n.t('timeslot.noSlots');
     }
 
-    return `${availableCount} müsait saat var. Dolu saatler seçilemez.`;
+    return i18n.t('timeslot.available', { count: availableCount });
   }
 
   lookupAppointments(name, phone) {
     if (!this.lookupService) {
-      return { success: false, message: 'Sorgulama servisi kullanılamıyor.', appointments: [] };
+      return { success: false, message: i18n.t('validation.lookupUnavailable'), appointments: [] };
     }
     return this.lookupService.findByCustomer(name, phone);
   }
 
   cancelAppointment(id, name, phone) {
     if (!this.lookupService) {
-      return { success: false, message: 'İptal servisi kullanılamıyor.' };
+      return { success: false, message: i18n.t('validation.cancelUnavailable') };
     }
     return this.lookupService.cancel(id, name, phone);
   }

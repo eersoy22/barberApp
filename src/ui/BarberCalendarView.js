@@ -1,5 +1,5 @@
-import { MONTHS } from '../config/constants.js';
 import { DateUtils } from '../utils/DateUtils.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * Berber paneli için aylık takvim görünümü.
@@ -59,8 +59,9 @@ export class BarberCalendarView {
     const year = this.viewDate.getFullYear();
     const month = this.viewDate.getMonth();
     const today = DateUtils.startOfDay(new Date());
+    const months = i18n.getMonths();
 
-    this.title.textContent = `${MONTHS[month]} ${year}`;
+    this.title.textContent = `${months[month]} ${year}`;
     this.daysContainer.innerHTML = '';
 
     const firstDay = new Date(year, month, 1);

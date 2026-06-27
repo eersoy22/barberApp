@@ -1,4 +1,5 @@
 import { DateUtils } from '../utils/DateUtils.js';
+import { i18n } from '../i18n/I18n.js';
 
 export class BarberPanelView {
   constructor(elements) {
@@ -15,6 +16,7 @@ export class BarberPanelView {
 
     this.allAppointments = [];
     this.selectedDate = null;
+    this.currentBarberName = '';
   }
 
   showLogin() {
@@ -24,9 +26,10 @@ export class BarberPanelView {
   }
 
   showDashboard(barberName) {
+    this.currentBarberName = barberName;
     this.loginSection.hidden = true;
     this.dashboardSection.hidden = false;
-    this.welcomeTitle.textContent = `Hoş geldin, ${barberName}`;
+    this.welcomeTitle.textContent = i18n.t('panel.welcome', { name: barberName });
   }
 
   renderAppointments(appointments, selectedDate = null) {
@@ -49,10 +52,12 @@ export class BarberPanelView {
 
   updateListTitle() {
     if (this.selectedDate) {
-      this.selectedDayTitle.textContent = `${DateUtils.formatDisplayFromIso(this.selectedDate)} Randevuları`;
+      this.selectedDayTitle.textContent = i18n.t('panel.dayAppointments', {
+        date: DateUtils.formatDisplayFromIso(this.selectedDate),
+      });
       this.clearDayBtn.hidden = false;
     } else {
-      this.selectedDayTitle.textContent = 'Tüm Randevular';
+      this.selectedDayTitle.textContent = i18n.t('panel.allAppointments');
       this.clearDayBtn.hidden = true;
     }
   }
@@ -62,13 +67,13 @@ export class BarberPanelView {
 
     if (this.allAppointments.length === 0) {
       this.emptyMessage.hidden = false;
-      this.emptyMessage.textContent = 'Henüz randevunuz bulunmuyor.';
+      this.emptyMessage.textContent = i18n.t('panel.emptyAll');
       return;
     }
 
     if (appointments.length === 0) {
       this.emptyMessage.hidden = false;
-      this.emptyMessage.textContent = 'Bu gün için randevu bulunmuyor.';
+      this.emptyMessage.textContent = i18n.t('panel.emptyDay');
       return;
     }
 
@@ -80,6 +85,9 @@ export class BarberPanelView {
       card.className = `panel-card${isPast ? ' panel-card-past' : ''}`;
 
       const dateLabel = DateUtils.formatDisplayFromIso(appointment.date);
+      const serviceLabel = appointment.serviceId
+        ? i18n.getServiceLabel(appointment.serviceId)
+        : appointment.service;
 
       card.innerHTML = `
         <div class="panel-card-header">
@@ -88,15 +96,15 @@ export class BarberPanelView {
             <span class="panel-card-time">${appointment.time}</span>
           </div>
           <span class="panel-badge ${isPast ? 'panel-badge-past' : 'panel-badge-upcoming'}">
-            ${isPast ? 'Geçmiş' : 'Yaklaşan'}
+            ${isPast ? i18n.t('panel.past') : i18n.t('panel.upcoming')}
           </span>
         </div>
         <ul class="panel-card-details">
-          <li><span>Müşteri</span><strong>${this.escapeHtml(appointment.name)}</strong></li>
-          <li><span>Telefon</span><strong>${this.escapeHtml(appointment.phone)}</strong></li>
-          <li><span>Hizmet</span><strong>${this.escapeHtml(appointment.service)}</strong></li>
+          <li><span>${i18n.t('panel.customer')}</span><strong>${this.escapeHtml(appointment.name)}</strong></li>
+          <li><span>${i18n.t('panel.phone')}</span><strong>${this.escapeHtml(appointment.phone)}</strong></li>
+          <li><span>${i18n.t('panel.service')}</span><strong>${this.escapeHtml(serviceLabel)}</strong></li>
         </ul>
-        ${appointment.note ? `<p class="panel-card-note">Not: ${this.escapeHtml(appointment.note)}</p>` : ''}
+        ${appointment.note ? `<p class="panel-card-note">${i18n.t('panel.note')}: ${this.escapeHtml(appointment.note)}</p>` : ''}
       `;
 
       this.appointmentsContainer.appendChild(card);
@@ -108,6 +116,17 @@ export class BarberPanelView {
     this.calendarView.setSelectedDate(isoDate);
     this.updateListTitle();
     this.renderList(this.getFilteredAppointments());
+  }
+
+  refreshLanguage() {
+    if (this.currentBarberName) {
+      this.welcomeTitle.textContent = i18n.t('panel.welcome', { name: this.currentBarberName });
+    }
+    if (this.allAppointments.length > 0) {
+      this.renderAppointments(this.allAppointments, this.selectedDate);
+    } else {
+      this.updateListTitle();
+    }
   }
 
   escapeHtml(text) {

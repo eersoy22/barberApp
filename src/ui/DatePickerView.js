@@ -1,8 +1,9 @@
 import { MONTHS } from '../config/constants.js';
 import { DateUtils } from '../utils/DateUtils.js';
+import { i18n } from '../i18n/I18n.js';
 
 export class DatePickerView {
-  constructor(elements, onDateChange) {
+  constructor(elements, onDateChange, options = {}) {
     this.trigger = elements.trigger;
     this.display = elements.display;
     this.input = elements.input;
@@ -12,6 +13,7 @@ export class DatePickerView {
     this.prevBtn = elements.prevBtn;
     this.nextBtn = elements.nextBtn;
     this.onDateChange = onDateChange;
+    this.useI18n = options.useI18n !== false;
 
     this.viewDate = new Date();
     this.selectedDate = null;
@@ -54,13 +56,21 @@ export class DatePickerView {
     return this.selectedDate;
   }
 
+  getMonths() {
+    return this.useI18n ? i18n.getMonths() : MONTHS;
+  }
+
+  getPlaceholder() {
+    return this.useI18n ? i18n.t('appointment.selectDate') : 'Tarih seçin';
+  }
+
   updateDisplay() {
     if (this.selectedDate) {
       this.display.textContent = DateUtils.formatDisplay(this.selectedDate);
       this.display.classList.remove('placeholder');
       this.input.value = DateUtils.formatIso(this.selectedDate);
     } else {
-      this.display.textContent = 'Tarih seçin';
+      this.display.textContent = this.getPlaceholder();
       this.display.classList.add('placeholder');
       this.input.value = '';
     }
@@ -72,8 +82,9 @@ export class DatePickerView {
     const year = this.viewDate.getFullYear();
     const month = this.viewDate.getMonth();
     const today = DateUtils.startOfDay(new Date());
+    const months = this.getMonths();
 
-    this.title.textContent = `${MONTHS[month]} ${year}`;
+    this.title.textContent = `${months[month]} ${year}`;
     this.daysContainer.innerHTML = '';
 
     const firstDay = new Date(year, month, 1);
@@ -130,5 +141,10 @@ export class DatePickerView {
     this.selectedDate = null;
     this.updateDisplay();
     this.close();
+  }
+
+  rerender() {
+    this.updateDisplay();
+    if (!this.popup.hidden) this.render();
   }
 }

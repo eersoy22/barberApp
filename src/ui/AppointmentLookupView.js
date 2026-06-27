@@ -1,19 +1,22 @@
 import { DateUtils } from '../utils/DateUtils.js';
+import { i18n } from '../i18n/I18n.js';
 
 export class AppointmentLookupView {
   constructor(resultsContainer, emptyMessageElement) {
     this.resultsContainer = resultsContainer;
     this.emptyMessageElement = emptyMessageElement;
     this.onCancel = null;
+    this.lastAppointments = [];
   }
 
   render(appointments, onCancel) {
     this.onCancel = onCancel;
+    this.lastAppointments = appointments;
     this.resultsContainer.innerHTML = '';
 
     if (appointments.length === 0) {
       this.emptyMessageElement.hidden = false;
-      this.emptyMessageElement.textContent = 'Bu bilgilerle eşleşen randevu bulunamadı.';
+      this.emptyMessageElement.textContent = i18n.t('lookup.noMatch');
       return;
     }
 
@@ -24,6 +27,9 @@ export class AppointmentLookupView {
       card.className = 'lookup-card';
 
       const dateLabel = DateUtils.formatDisplayFromIso(appointment.date);
+      const serviceLabel = appointment.serviceId
+        ? i18n.getServiceLabel(appointment.serviceId)
+        : appointment.service;
 
       card.innerHTML = `
         <div class="lookup-card-header">
@@ -31,13 +37,13 @@ export class AppointmentLookupView {
           <span class="lookup-time">${appointment.time}</span>
         </div>
         <ul class="lookup-details">
-          <li><span>Hizmet</span><strong>${this.escapeHtml(appointment.service)}</strong></li>
-          <li><span>Berber</span><strong>${this.escapeHtml(appointment.barber)}</strong></li>
-          <li><span>Telefon</span><strong>${this.escapeHtml(appointment.phone)}</strong></li>
+          <li><span>${i18n.t('lookup.service')}</span><strong>${this.escapeHtml(serviceLabel)}</strong></li>
+          <li><span>${i18n.t('lookup.barber')}</span><strong>${this.escapeHtml(appointment.barber)}</strong></li>
+          <li><span>${i18n.t('lookup.phone')}</span><strong>${this.escapeHtml(appointment.phone)}</strong></li>
         </ul>
-        ${appointment.note ? `<p class="lookup-note">Not: ${this.escapeHtml(appointment.note)}</p>` : ''}
+        ${appointment.note ? `<p class="lookup-note">${i18n.t('lookup.note')}: ${this.escapeHtml(appointment.note)}</p>` : ''}
         <button type="button" class="btn btn-cancel" data-appointment-id="${appointment.id}">
-          Randevuyu İptal Et
+          ${i18n.t('lookup.cancelBtn')}
         </button>
       `;
 
@@ -52,6 +58,13 @@ export class AppointmentLookupView {
   clear() {
     this.resultsContainer.innerHTML = '';
     this.emptyMessageElement.hidden = true;
+    this.lastAppointments = [];
+  }
+
+  rerender() {
+    if (this.lastAppointments.length > 0) {
+      this.render(this.lastAppointments, this.onCancel);
+    }
   }
 
   escapeHtml(text) {

@@ -1,10 +1,12 @@
+import { i18n } from '../i18n/I18n.js';
+
 export class DateUtils {
   static startOfDay(date) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
 
   static formatDisplay(date) {
-    return date.toLocaleDateString('tr-TR', {
+    return date.toLocaleDateString(i18n.getLocaleTag(), {
       day: 'numeric',
       month: 'long',
       year: 'numeric',

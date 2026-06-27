@@ -1,5 +1,6 @@
-import { SERVICE_LABELS, BARBER_LABELS } from '../config/constants.js';
+import { BARBER_LABELS } from '../config/constants.js';
 import { Appointment } from '../domain/Appointment.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GOF — Factory Method
@@ -14,7 +15,7 @@ export class AppointmentFactory {
       name: formData.name.trim(),
       phone: formData.phone?.trim() ?? '',
       serviceId: formData.serviceId,
-      service: SERVICE_LABELS[formData.serviceId],
+      service: i18n.getServiceLabel(formData.serviceId),
       barberId,
       barber: BARBER_LABELS[barberId],
       date: formData.date,

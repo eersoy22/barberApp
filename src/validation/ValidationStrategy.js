@@ -3,6 +3,7 @@
  * Doğrulama algoritmalarını değiştirilebilir kılar.
  */
 import { Appointment } from '../domain/Appointment.js';
+import { i18n } from '../i18n/I18n.js';
 
 export class ValidationStrategy {
   validate() {
@@ -13,22 +14,22 @@ export class ValidationStrategy {
 export class RequiredFieldsValidation extends ValidationStrategy {
   validate(formData) {
     if (!formData.name?.trim()) {
-      return { valid: false, message: 'Lütfen ad soyad girin.' };
+      return { valid: false, message: i18n.t('validation.nameRequired') };
     }
     if (!formData.phone?.trim()) {
-      return { valid: false, message: 'Lütfen telefon numarası girin.' };
+      return { valid: false, message: i18n.t('validation.phoneRequired') };
     }
     if (!formData.serviceId) {
-      return { valid: false, message: 'Lütfen bir hizmet seçin.' };
+      return { valid: false, message: i18n.t('validation.serviceRequired') };
     }
     if (!formData.barberId) {
-      return { valid: false, message: 'Lütfen bir berber seçin.' };
+      return { valid: false, message: i18n.t('validation.barberRequired') };
     }
     if (!formData.date) {
-      return { valid: false, message: 'Lütfen bir tarih seçin.' };
+      return { valid: false, message: i18n.t('validation.dateRequired') };
     }
     if (!formData.time) {
-      return { valid: false, message: 'Lütfen müsait bir saat seçin.' };
+      return { valid: false, message: i18n.t('validation.timeRequired') };
     }
     return { valid: true };
   }
@@ -37,10 +38,7 @@ export class RequiredFieldsValidation extends ValidationStrategy {
 export class PhoneValidation extends ValidationStrategy {
   validate(formData) {
     if (!Appointment.isValidPhone(formData.phone)) {
-      return {
-        valid: false,
-        message: 'Geçerli bir cep telefonu numarası girin (örn: 05XX XXX XX XX).',
-      };
+      return { valid: false, message: i18n.t('validation.phoneInvalid') };
     }
     return { valid: true };
   }
@@ -49,19 +47,19 @@ export class PhoneValidation extends ValidationStrategy {
 export class ManualRequiredFieldsValidation extends ValidationStrategy {
   validate(formData) {
     if (!formData.name?.trim()) {
-      return { valid: false, message: 'Lütfen müşteri adı girin.' };
+      return { valid: false, message: i18n.t('validation.customerNameRequired') };
     }
     if (!formData.serviceId) {
-      return { valid: false, message: 'Lütfen bir hizmet seçin.' };
+      return { valid: false, message: i18n.t('validation.serviceRequired') };
     }
     if (!formData.barberId) {
-      return { valid: false, message: 'Lütfen bir berber seçin.' };
+      return { valid: false, message: i18n.t('validation.barberRequired') };
     }
     if (!formData.date) {
-      return { valid: false, message: 'Lütfen bir tarih seçin.' };
+      return { valid: false, message: i18n.t('validation.dateRequired') };
     }
     if (!formData.time) {
-      return { valid: false, message: 'Lütfen müsait bir saat seçin.' };
+      return { valid: false, message: i18n.t('validation.timeRequired') };
     }
     return { valid: true };
   }
@@ -74,10 +72,7 @@ export class OptionalPhoneValidation extends ValidationStrategy {
     }
 
     if (!Appointment.isValidPhone(formData.phone)) {
-      return {
-        valid: false,
-        message: 'Geçerli bir cep telefonu numarası girin (örn: 05XX XXX XX XX).',
-      };
+      return { valid: false, message: i18n.t('validation.phoneInvalid') };
     }
 
     return { valid: true };
@@ -98,10 +93,7 @@ export class SlotAvailabilityValidation extends ValidationStrategy {
     );
 
     if (isBooked) {
-      return {
-        valid: false,
-        message: 'Bu saat az önce dolmuş. Lütfen başka bir saat seçin.',
-      };
+      return { valid: false, message: i18n.t('validation.slotTaken') };
     }
 
     return { valid: true };
@@ -111,10 +103,10 @@ export class SlotAvailabilityValidation extends ValidationStrategy {
 export class LookupFieldsValidation extends ValidationStrategy {
   validate(formData) {
     if (!formData.name?.trim()) {
-      return { valid: false, message: 'Lütfen ad soyad girin.' };
+      return { valid: false, message: i18n.t('validation.nameRequired') };
     }
     if (!formData.phone?.trim()) {
-      return { valid: false, message: 'Lütfen telefon numarası girin.' };
+      return { valid: false, message: i18n.t('validation.phoneRequired') };
     }
     return { valid: true };
   }

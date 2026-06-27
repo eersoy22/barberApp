@@ -1,4 +1,5 @@
 import { BARBER_LABELS, BARBER_PINS, SESSION_KEY } from '../config/constants.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Pure Fabrication
@@ -11,15 +12,15 @@ export class BarberPanelService {
 
   login(barberId, pin) {
     if (!barberId || !BARBER_LABELS[barberId]) {
-      return { success: false, message: 'Lütfen bir berber seçin.' };
+      return { success: false, message: i18n.t('validation.barberRequired') };
     }
 
     if (!pin?.trim()) {
-      return { success: false, message: 'Lütfen PIN kodunuzu girin.' };
+      return { success: false, message: i18n.t('validation.pinRequired') };
     }
 
     if (BARBER_PINS[barberId] !== pin.trim()) {
-      return { success: false, message: 'Hatalı PIN kodu.' };
+      return { success: false, message: i18n.t('validation.pinInvalid') };
     }
 
     sessionStorage.setItem(SESSION_KEY, barberId);
@@ -72,7 +73,7 @@ export class BarberPanelFacade {
   getMyAppointments() {
     const session = this.panelService.getSession();
     if (!session) {
-      return { success: false, message: 'Oturum bulunamadı.', appointments: [] };
+      return { success: false, message: i18n.t('validation.sessionNotFound'), appointments: [] };
     }
 
     const appointments = this.panelService.getAppointments(session.barberId);
@@ -82,7 +83,7 @@ export class BarberPanelFacade {
   createManualAppointment(formData) {
     const session = this.panelService.getSession();
     if (!session) {
-      return { success: false, message: 'Oturum bulunamadı.' };
+      return { success: false, message: i18n.t('validation.sessionNotFound') };
     }
 
     return this.bookingFacade.createAppointment({

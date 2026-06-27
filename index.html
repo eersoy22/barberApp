@@ -7,21 +7,25 @@
   <meta name="description" content="Berber — Profesyonel saç kesimi, sakal tıraşı ve bakım hizmetleri. Online randevu alın.">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page-title-key="meta.title" data-page-desc-key="meta.description">
   <header class="header" id="header">
     <nav class="nav container">
       <a href="#" class="logo">Berber</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat">
+      <div class="lang-switch" id="langSwitch" aria-label="Language">
+        <button type="button" class="lang-btn active" data-lang="tr">TR</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="nav-toggle" id="navToggle" data-i18n-aria-label="nav.toggle">
         <span></span>
         <span></span>
         <span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#bilgi">Bilgi</a></li>
-        <li><a href="#hizmetler">Hizmetler</a></li>
-        <li><a href="#randevu">Randevu</a></li>
-        <li><a href="#sorgula">Randevularım</a></li>
-        <li><a href="#iletisim">İletişim</a></li>
+        <li><a href="#bilgi" data-i18n="nav.info">Bilgi</a></li>
+        <li><a href="#hizmetler" data-i18n="nav.services">Hizmetler</a></li>
+        <li><a href="#randevu" data-i18n="nav.appointment">Randevu</a></li>
+        <li><a href="#sorgula" data-i18n="nav.myAppointments">Randevularım</a></li>
+        <li><a href="#iletisim" data-i18n="nav.contact">İletişim</a></li>
       </ul>
     </nav>
   </header>
@@ -30,12 +34,12 @@
     <section class="hero">
       <div class="hero-overlay"></div>
       <div class="hero-content container">
-        <p class="hero-tag">Erkek Kuaförü & Berber</p>
-        <h1>Stilinizi<br><em>biz şekillendiriyoruz</em></h1>
-        <p class="hero-desc">Profesyonel saç kesimi, sakal bakımı ve klasik berber deneyimi. Randevunuzu hemen oluşturun.</p>
+        <p class="hero-tag" data-i18n="hero.tag">Erkek Kuaförü & Berber</p>
+        <h1 data-i18n-html="hero.title">Stilinizi<br><em>biz şekillendiriyoruz</em></h1>
+        <p class="hero-desc" data-i18n="hero.desc">Profesyonel saç kesimi, sakal bakımı ve klasik berber deneyimi. Randevunuzu hemen oluşturun.</p>
         <div class="hero-actions">
-          <a href="#randevu" class="btn btn-primary">Randevu Al</a>
-          <a href="#bilgi" class="btn btn-outline">Daha Fazla Bilgi</a>
+          <a href="#randevu" class="btn btn-primary" data-i18n="hero.book">Randevu Al</a>
+          <a href="#bilgi" class="btn btn-outline" data-i18n="hero.moreInfo">Daha Fazla Bilgi</a>
         </div>
       </div>
     </section>
@@ -43,38 +47,38 @@
     <section class="section" id="bilgi">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Hakkımızda</span>
-          <h2>Bilgi</h2>
+          <span class="section-label" data-i18n="info.label">Hakkımızda</span>
+          <h2 data-i18n="info.title">Bilgi</h2>
         </div>
         <div class="info-grid">
           <div class="info-text">
-            <p>
+            <p data-i18n-html="info.p1">
               <strong>Berber</strong>, 2015 yılından bu yana erkeklere özel saç ve sakal bakım hizmeti sunmaktadır.
               Deneyimli ekibimiz, her müşteriye kişisel ilgi göstererek en iyi görünümü elde etmenizi sağlar.
             </p>
-            <p>
+            <p data-i18n="info.p2">
               Modern tekniklerle klasik berber sanatını bir araya getiriyoruz. Hijyenik ortamımızda
               rahat ve keyifli bir deneyim yaşayacaksınız.
             </p>
             <ul class="info-list">
-              <li>Deneyimli ve sertifikalı berberler</li>
-              <li>Premium bakım ürünleri</li>
-              <li>Hijyenik ve konforlu ortam</li>
-              <li>Online randevu sistemi</li>
+              <li data-i18n="info.li1">Deneyimli ve sertifikalı berberler</li>
+              <li data-i18n="info.li2">Premium bakım ürünleri</li>
+              <li data-i18n="info.li3">Hijyenik ve konforlu ortam</li>
+              <li data-i18n="info.li4">Online randevu sistemi</li>
             </ul>
           </div>
           <div class="info-stats">
             <div class="stat">
               <span class="stat-number">10+</span>
-              <span class="stat-label">Yıllık Deneyim</span>
+              <span class="stat-label" data-i18n="info.statExperience">Yıllık Deneyim</span>
             </div>
             <div class="stat">
               <span class="stat-number">5000+</span>
-              <span class="stat-label">Mutlu Müşteri</span>
+              <span class="stat-label" data-i18n="info.statCustomers">Mutlu Müşteri</span>
             </div>
             <div class="stat">
               <span class="stat-number">4.9</span>
-              <span class="stat-label">Müşteri Puanı</span>
+              <span class="stat-label" data-i18n="info.statRating">Müşteri Puanı</span>
             </div>
           </div>
         </div>
@@ -84,32 +88,32 @@
     <section class="section section-dark" id="hizmetler">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Ne Sunuyoruz</span>
-          <h2>Hizmetlerimiz</h2>
+          <span class="section-label" data-i18n="services.label">Ne Sunuyoruz</span>
+          <h2 data-i18n="services.title">Hizmetlerimiz</h2>
         </div>
         <div class="services-grid">
           <article class="service-card">
             <div class="service-icon">✂️</div>
-            <h3>Saç Kesimi</h3>
-            <p>Klasik ve modern tarzlarda profesyonel saç kesimi.</p>
+            <h3 data-i18n="services.haircut">Saç Kesimi</h3>
+            <p data-i18n="services.haircutDesc">Klasik ve modern tarzlarda profesyonel saç kesimi.</p>
             <span class="service-price">₺250</span>
           </article>
           <article class="service-card">
             <div class="service-icon">🪒</div>
-            <h3>Sakal Tıraşı</h3>
-            <p>Sıcak havlu ve ustura ile geleneksel sakal bakımı.</p>
+            <h3 data-i18n="services.beard">Sakal Tıraşı</h3>
+            <p data-i18n="services.beardDesc">Sıcak havlu ve ustura ile geleneksel sakal bakımı.</p>
             <span class="service-price">₺150</span>
           </article>
           <article class="service-card">
             <div class="service-icon">💈</div>
-            <h3>Saç + Sakal</h3>
-            <p>Komple bakım paketi — saç kesimi ve sakal şekillendirme.</p>
+            <h3 data-i18n="services.combo">Saç + Sakal</h3>
+            <p data-i18n="services.comboDesc">Komple bakım paketi — saç kesimi ve sakal şekillendirme.</p>
             <span class="service-price">₺350</span>
           </article>
           <article class="service-card">
             <div class="service-icon">🧴</div>
-            <h3>Cilt Bakımı</h3>
-            <p>Yüz temizliği, maske ve nemlendirme uygulaması.</p>
+            <h3 data-i18n="services.skincare">Cilt Bakımı</h3>
+            <p data-i18n="services.skincareDesc">Yüz temizliği, maske ve nemlendirme uygulaması.</p>
             <span class="service-price">₺200</span>
           </article>
         </div>
@@ -119,36 +123,36 @@
     <section class="section" id="randevu">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Online Rezervasyon</span>
-          <h2>Randevu Oluştur</h2>
+          <span class="section-label" data-i18n="appointment.label">Online Rezervasyon</span>
+          <h2 data-i18n="appointment.title">Randevu Oluştur</h2>
         </div>
         <div class="appointment-wrapper">
           <form class="appointment-form" id="appointmentForm">
             <div class="form-row">
               <div class="form-group">
-                <label for="name">Ad Soyad</label>
-                <input type="text" id="name" name="name" required placeholder="Adınız Soyadınız">
+                <label for="name" data-i18n="appointment.name">Ad Soyad</label>
+                <input type="text" id="name" name="name" required data-i18n-placeholder="appointment.namePlaceholder" placeholder="Adınız Soyadınız">
               </div>
               <div class="form-group">
-                <label for="phone">Telefon</label>
-                <input type="tel" id="phone" name="phone" required placeholder="05XX XXX XX XX" inputmode="tel" autocomplete="tel">
+                <label for="phone" data-i18n="appointment.phone">Telefon</label>
+                <input type="tel" id="phone" name="phone" required data-i18n-placeholder="appointment.phonePlaceholder" placeholder="05XX XXX XX XX" inputmode="tel" autocomplete="tel">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label for="service">Hizmet</label>
+                <label for="service" data-i18n="appointment.service">Hizmet</label>
                 <select id="service" name="service" required>
-                  <option value="">Hizmet seçin</option>
-                  <option value="sac-kesimi">Saç Kesimi — ₺250</option>
-                  <option value="sakal-tirasi">Sakal Tıraşı — ₺150</option>
-                  <option value="sac-sakal">Saç + Sakal — ₺350</option>
-                  <option value="cilt-bakimi">Cilt Bakımı — ₺200</option>
+                  <option value="" data-i18n-value="appointment.selectService">Hizmet seçin</option>
+                  <option value="sac-kesimi" data-i18n-option="sac-kesimi">Saç Kesimi — ₺250</option>
+                  <option value="sakal-tirasi" data-i18n-option="sakal-tirasi">Sakal Tıraşı — ₺150</option>
+                  <option value="sac-sakal" data-i18n-option="sac-sakal">Saç + Sakal — ₺350</option>
+                  <option value="cilt-bakimi" data-i18n-option="cilt-bakimi">Cilt Bakımı — ₺200</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="barber">Berber</label>
+                <label for="barber" data-i18n="appointment.barber">Berber</label>
                 <select id="barber" name="barber" required>
-                  <option value="">Berber seçin</option>
+                  <option value="" data-i18n-value="appointment.selectBarber">Berber seçin</option>
                   <option value="mehmet">Mehmet İmrek</option>
                   <option value="hikmet">Hikmet Görmez</option>
                   <option value="ramazan">Ramazan Hamza</option>
@@ -157,7 +161,7 @@
             </div>
             <div class="form-row">
               <div class="form-group date-picker">
-                <label for="date">Tarih</label>
+                <label for="date" data-i18n="appointment.date">Tarih</label>
                 <div class="date-picker-wrap" id="datePicker">
                   <button type="button" class="date-picker-trigger" id="dateTrigger" aria-haspopup="dialog" aria-expanded="false">
                     <span class="date-picker-value" id="dateDisplay">Tarih seçin</span>
@@ -166,43 +170,43 @@
                   <input type="hidden" id="date" name="date" required>
                   <div class="calendar-popup" id="calendarPopup" hidden>
                     <div class="calendar-header">
-                      <button type="button" class="calendar-nav" id="prevMonth" aria-label="Önceki ay">‹</button>
+                      <button type="button" class="calendar-nav" id="prevMonth" data-i18n-aria-label="calendar.prevMonth" aria-label="Önceki ay">‹</button>
                       <span class="calendar-title" id="calendarTitle"></span>
-                      <button type="button" class="calendar-nav" id="nextMonth" aria-label="Sonraki ay">›</button>
+                      <button type="button" class="calendar-nav" id="nextMonth" data-i18n-aria-label="calendar.nextMonth" aria-label="Sonraki ay">›</button>
                     </div>
                     <div class="calendar-weekdays">
-                      <span>Pzt</span>
-                      <span>Sal</span>
-                      <span>Çar</span>
-                      <span>Per</span>
-                      <span>Cum</span>
-                      <span>Cmt</span>
-                      <span>Paz</span>
+                      <span data-i18n-weekday="0">Pzt</span>
+                      <span data-i18n-weekday="1">Sal</span>
+                      <span data-i18n-weekday="2">Çar</span>
+                      <span data-i18n-weekday="3">Per</span>
+                      <span data-i18n-weekday="4">Cum</span>
+                      <span data-i18n-weekday="5">Cmt</span>
+                      <span data-i18n-weekday="6">Paz</span>
                     </div>
                     <div class="calendar-days" id="calendarDays"></div>
                   </div>
                 </div>
               </div>
               <div class="form-group">
-                <label for="time">Saat</label>
+                <label for="time" data-i18n="appointment.time">Saat</label>
                 <select id="time" name="time" required>
-                  <option value="">Saat seçin</option>
+                  <option value="" data-i18n-value="appointment.selectTime">Saat seçin</option>
                 </select>
                 <p class="field-hint" id="timeHint">Önce berber ve tarih seçin.</p>
               </div>
             </div>
             <div class="form-group">
-              <label for="note">Not (isteğe bağlı)</label>
-              <textarea id="note" name="note" rows="3" placeholder="Eklemek istediğiniz bir not varsa yazın..."></textarea>
+              <label for="note" data-i18n="appointment.note">Not (isteğe bağlı)</label>
+              <textarea id="note" name="note" rows="3" data-i18n-placeholder="appointment.notePlaceholder" placeholder="Eklemek istediğiniz bir not varsa yazın..."></textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-full">Randevu Oluştur</button>
+            <button type="submit" class="btn btn-primary btn-full" data-i18n="appointment.submit">Randevu Oluştur</button>
           </form>
           <div class="appointment-info">
-            <h3>Çalışma Saatleri</h3>
+            <h3 data-i18n="appointment.hoursTitle">Çalışma Saatleri</h3>
             <ul class="hours-list">
-              <li><span>Pazartesi — Cuma</span><span>09:00 — 20:00</span></li>
-              <li><span>Cumartesi</span><span>09:00 — 18:00</span></li>
-              <li><span>Pazar</span><span>Kapalı</span></li>
+              <li><span data-i18n="appointment.weekday">Pazartesi — Cuma</span><span>09:00 — 20:00</span></li>
+              <li><span data-i18n="appointment.saturday">Cumartesi</span><span>09:00 — 18:00</span></li>
+              <li><span data-i18n="appointment.sunday">Pazar</span><span data-i18n="appointment.closed">Kapalı</span></li>
             </ul>
           </div>
         </div>
@@ -212,22 +216,22 @@
     <section class="section section-dark" id="sorgula">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Randevu Takibi</span>
-          <h2>Randevularımı Sorgula</h2>
+          <span class="section-label" data-i18n="lookup.label">Randevu Takibi</span>
+          <h2 data-i18n="lookup.title">Randevularımı Sorgula</h2>
         </div>
         <div class="lookup-wrapper">
           <form class="lookup-form" id="lookupForm">
             <div class="form-row">
               <div class="form-group">
-                <label for="lookupName">Ad Soyad</label>
-                <input type="text" id="lookupName" name="lookupName" required placeholder="Randevu alırken kullandığınız ad">
+                <label for="lookupName" data-i18n="appointment.name">Ad Soyad</label>
+                <input type="text" id="lookupName" name="lookupName" required data-i18n-placeholder="lookup.namePlaceholder" placeholder="Randevu alırken kullandığınız ad">
               </div>
               <div class="form-group">
-                <label for="lookupPhone">Telefon</label>
-                <input type="tel" id="lookupPhone" name="lookupPhone" required placeholder="05XX XXX XX XX">
+                <label for="lookupPhone" data-i18n="appointment.phone">Telefon</label>
+                <input type="tel" id="lookupPhone" name="lookupPhone" required data-i18n-placeholder="appointment.phonePlaceholder" placeholder="05XX XXX XX XX">
               </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-full">Randevularımı Göster</button>
+            <button type="submit" class="btn btn-primary btn-full" data-i18n="lookup.submit">Randevularımı Göster</button>
           </form>
           <div class="lookup-results">
             <p class="lookup-empty" id="lookupEmpty" hidden>Randevu bulunamadı.</p>
@@ -240,36 +244,36 @@
     <section class="section" id="iletisim">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Bize Ulaşın</span>
-          <h2>İletişim</h2>
+          <span class="section-label" data-i18n="contact.label">Bize Ulaşın</span>
+          <h2 data-i18n="contact.title">İletişim</h2>
         </div>
         <div class="contact-info">
             <div class="contact-item">
               <div class="contact-icon">📍</div>
               <div>
-                <h4>Adres</h4>
+                <h4 data-i18n="contact.address">Adres</h4>
                 <p>Maslak Mahallesi, Çınar Sokak, No: 1<br>Sarıyer / İstanbul</p>
               </div>
             </div>
             <div class="contact-item">
               <div class="contact-icon">📞</div>
               <div>
-                <h4>Telefon</h4>
+                <h4 data-i18n="contact.phone">Telefon</h4>
                 <p><a href="tel:+902161234567">0216 123 45 67</a></p>
               </div>
             </div>
             <div class="contact-item">
               <div class="contact-icon">✉️</div>
               <div>
-                <h4>E-posta</h4>
+                <h4 data-i18n="contact.email">E-posta</h4>
                 <p><a href="mailto:info@berber.com">info@berber.com</a></p>
               </div>
             </div>
             <div class="contact-item">
               <div class="contact-icon">🕐</div>
               <div>
-                <h4>Çalışma Saatleri</h4>
-                <p>Pzt–Cum: 09:00–20:00<br>Cmt: 09:00–18:00</p>
+                <h4 data-i18n="contact.hours">Çalışma Saatleri</h4>
+                <p data-i18n-html="contact.hoursShort">Pzt–Cum: 09:00–20:00<br>Cmt: 09:00–18:00</p>
               </div>
             </div>
         </div>
@@ -281,16 +285,16 @@
     <div class="container footer-content">
       <div class="footer-brand">
         <a href="#" class="logo">Berber</a>
-        <p>Profesyonel erkek kuaförü ve berber hizmetleri.</p>
+        <p data-i18n="footer.desc">Profesyonel erkek kuaförü ve berber hizmetleri.</p>
       </div>
       <div class="footer-links">
-        <a href="#bilgi">Bilgi</a>
-        <a href="#hizmetler">Hizmetler</a>
-        <a href="#randevu">Randevu</a>
-        <a href="#sorgula">Randevularım</a>
-        <a href="#iletisim">İletişim</a>
+        <a href="#bilgi" data-i18n="nav.info">Bilgi</a>
+        <a href="#hizmetler" data-i18n="nav.services">Hizmetler</a>
+        <a href="#randevu" data-i18n="nav.appointment">Randevu</a>
+        <a href="#sorgula" data-i18n="nav.myAppointments">Randevularım</a>
+        <a href="#iletisim" data-i18n="nav.contact">İletişim</a>
       </div>
-      <p class="footer-copy">&copy; 2026 Berber. Tüm hakları saklıdır. · <a href="berber-panel.html" class="footer-staff-link">Berber Paneli</a></p>
+      <p class="footer-copy"><span data-i18n="footer.copy">© 2026 Berber. Tüm hakları saklıdır.</span> · <a href="berber-panel.html" class="footer-staff-link" data-i18n="footer.panel">Berber Paneli</a></p>
     </div>
   </footer>
 

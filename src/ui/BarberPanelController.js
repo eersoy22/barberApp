@@ -1,4 +1,5 @@
 import { APP_EVENTS } from '../config/constants.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Controller
@@ -26,6 +27,11 @@ export class BarberPanelController {
 
     this.eventBus.subscribe(APP_EVENTS.APPOINTMENTS_CHANGED, () => {
       if (this.facade.getSession()) this.loadAppointments();
+    });
+
+    this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
+      this.view.refreshLanguage();
+      this.manualAppointmentController?.onLanguageChange();
     });
   }
 
@@ -56,13 +62,13 @@ export class BarberPanelController {
     this.view.showDashboard(result.barberName);
     this.loadAppointments();
     this.manualAppointmentController?.refreshTimeSlots();
-    this.toastView.show(`Giriş başarılı. Hoş geldin, ${result.barberName}.`);
+    this.toastView.show(i18n.t('panel.loginSuccess', { name: result.barberName }));
   }
 
   handleLogout() {
     this.facade.logout();
     this.view.showLogin();
-    this.toastView.show('Çıkış yapıldı.');
+    this.toastView.show(i18n.t('panel.logoutToast'));
   }
 
   loadAppointments() {

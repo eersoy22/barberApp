@@ -1,3 +1,5 @@
+import { i18n } from '../i18n/I18n.js';
+
 /**
  * GRASP — Information Expert
  * Saat diliminin müsaitlik durumunu kendi bilir.
@@ -13,6 +15,6 @@ export class TimeSlot {
   }
 
   get label() {
-    return this.isBooked ? `${this.time} (Dolu)` : this.time;
+    return this.isBooked ? `${this.time} ${i18n.t('timeslot.booked')}` : this.time;
   }
 }

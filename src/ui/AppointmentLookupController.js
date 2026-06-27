@@ -1,20 +1,27 @@
 import { DateUtils } from '../utils/DateUtils.js';
+import { APP_EVENTS } from '../config/constants.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Controller
  */
 export class AppointmentLookupController {
-  constructor(form, lookupView, bookingFacade, toastView) {
+  constructor(form, lookupView, bookingFacade, toastView, eventBus) {
     this.form = form;
     this.lookupView = lookupView;
     this.bookingFacade = bookingFacade;
     this.toastView = toastView;
+    this.eventBus = eventBus;
     this.lastSearch = { name: '', phone: '' };
     this.bindEvents();
   }
 
   bindEvents() {
     this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+    this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
+      this.lookupView.rerender();
+    });
   }
 
   getSearchCredentials() {
@@ -55,14 +62,14 @@ export class AppointmentLookupController {
     this.lookupView.render(result.appointments, (id) => this.handleCancel(id));
 
     if (result.appointments.length === 0) {
-      this.toastView.show('Randevu bulunamadı.');
+      this.toastView.show(i18n.t('lookup.notFoundToast'));
     } else {
-      this.toastView.show(`${result.appointments.length} randevu bulundu.`);
+      this.toastView.show(i18n.t('lookup.found', { count: result.appointments.length }));
     }
   }
 
   handleCancel(appointmentId) {
-    const confirmed = window.confirm('Bu randevuyu iptal etmek istediğinize emin misiniz?');
+    const confirmed = window.confirm(i18n.t('lookup.cancelConfirm'));
     if (!confirmed) return;
 
     const result = this.bookingFacade.cancelAppointment(
@@ -77,7 +84,10 @@ export class AppointmentLookupController {
     }
 
     const dateLabel = DateUtils.formatDisplayFromIso(result.appointment.date);
-    this.toastView.show(`Randevu iptal edildi: ${dateLabel} — ${result.appointment.time}`);
+    this.toastView.show(i18n.t('lookup.cancelled', {
+      date: dateLabel,
+      time: result.appointment.time,
+    }));
     this.refreshResults();
   }
 }

@@ -1,5 +1,6 @@
 import { APP_EVENTS } from '../config/constants.js';
 import { DateUtils } from '../utils/DateUtils.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Controller
@@ -27,6 +28,11 @@ export class AppointmentFormController {
     this.eventBus.subscribe(APP_EVENTS.APPOINTMENTS_CHANGED, () => {
       this.refreshTimeSlots();
     });
+
+    this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
+      this.datePicker.rerender();
+      this.refreshTimeSlots();
+    });
   }
 
   refreshTimeSlots() {
@@ -52,7 +58,7 @@ export class AppointmentFormController {
     };
 
     if (!formData.date) {
-      this.toastView.show('Lütfen bir tarih seçin.');
+      this.toastView.show(i18n.t('appointment.selectDateToast'));
       this.datePicker.open();
       return;
     }
@@ -67,7 +73,10 @@ export class AppointmentFormController {
 
     const selectedDate = this.datePicker.getSelectedDate();
     this.toastView.show(
-      `Randevunuz oluşturuldu! ${DateUtils.formatDisplay(selectedDate)} — ${formData.time}`,
+      i18n.t('appointment.created', {
+        date: DateUtils.formatDisplay(selectedDate),
+        time: formData.time,
+      }),
     );
 
     this.form.reset();

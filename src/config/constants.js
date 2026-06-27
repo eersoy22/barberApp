@@ -1,4 +1,5 @@
 export const STORAGE_KEY = 'appointments';
+export const LANG_KEY = 'appLanguage';
 
 export const TIME_SLOTS = [
   '09:00', '10:00', '11:00', '12:00', '13:00',
@@ -35,4 +36,5 @@ export const APP_EVENTS = {
   APPOINTMENT_CREATED: 'appointment:created',
   APPOINTMENT_CANCELLED: 'appointment:cancelled',
   APPOINTMENTS_CHANGED: 'appointments:changed',
+  LANGUAGE_CHANGED: 'language:changed',
 };

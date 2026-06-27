@@ -1,23 +1,37 @@
 import { DateUtils } from '../utils/DateUtils.js';
+import { APP_EVENTS } from '../config/constants.js';
+import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Controller
  * Telefonla alınan randevuların manuel girilmesi.
  */
 export class BarberManualAppointmentController {
-  constructor(form, datePicker, timeSlotView, panelFacade, toastView, onCreated) {
+  constructor(form, datePicker, timeSlotView, panelFacade, toastView, eventBus, onCreated) {
     this.form = form;
     this.datePicker = datePicker;
     this.timeSlotView = timeSlotView;
     this.panelFacade = panelFacade;
     this.toastView = toastView;
+    this.eventBus = eventBus;
     this.onCreated = onCreated;
 
+    this.timeSlotView.missingDateHint = i18n.t('appointment.selectDateFirst');
     this.bindEvents();
   }
 
   bindEvents() {
     this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+    this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
+      this.onLanguageChange();
+    });
+  }
+
+  onLanguageChange() {
+    this.timeSlotView.missingDateHint = i18n.t('appointment.selectDateFirst');
+    this.datePicker.rerender();
+    this.refreshTimeSlots();
   }
 
   getBarberId() {
@@ -43,20 +57,20 @@ export class BarberManualAppointmentController {
 
     const session = this.panelFacade.getSession();
     if (!session) {
-      this.toastView.show('Oturum bulunamadı. Lütfen tekrar giriş yapın.');
+      this.toastView.show(i18n.t('panel.sessionLost'));
       return;
     }
 
     const date = this.datePicker.getValue();
     if (!date) {
-      this.toastView.show('Lütfen bir tarih seçin.');
+      this.toastView.show(i18n.t('appointment.selectDateToast'));
       this.datePicker.open();
       return;
     }
 
     const [year, month, day] = date.split('-').map(Number);
     if (DateUtils.isDateDisabled(new Date(year, month - 1, day))) {
-      this.toastView.show('Geçmiş veya kapalı günler için randevu eklenemez.');
+      this.toastView.show(i18n.t('panel.pastDayBlocked'));
       return;
     }
 
@@ -78,7 +92,11 @@ export class BarberManualAppointmentController {
       return;
     }
 
-    this.toastView.show(`Randevu eklendi: ${formData.name} — ${date} ${formData.time}`);
+    this.toastView.show(i18n.t('panel.added', {
+      name: formData.name,
+      date,
+      time: formData.time,
+    }));
     this.resetForm();
     this.onCreated();
   }
