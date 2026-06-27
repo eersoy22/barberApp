@@ -30,6 +30,10 @@ Aşağıdaki görseller **Türkçe (TR)** arayüzü gösterir.
 
 ![Randevu sorgulama](docs/screenshots/tr_musteri_randevu_takip.png)
 
+**İletişim**
+
+![İletişim ekranı](docs/screenshots/tr_iletisimEkrani.png)
+
 ### Berber paneli
 
 **Giriş ekranı**
@@ -39,6 +43,10 @@ Aşağıdaki görseller **Türkçe (TR)** arayüzü gösterir.
 **Takvim, randevu listesi ve iptal**
 
 ![Berber paneli dashboard](docs/screenshots/tr_berberPanel.png)
+
+**Manuel randevu ekleme**
+
+![Berber paneli manuel randevu](docs/screenshots/tr_manuelRandevu_berberPanel.png)
 
 ## Özellikler
 

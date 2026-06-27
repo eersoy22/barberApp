@@ -30,6 +30,10 @@ Screens below show the **English (EN)** UI.
 
 ![Appointment lookup](screenshots/en_appointmentTracking_customer.png)
 
+**Contact**
+
+![Contact screen](screenshots/en_contactScren.png)
+
 ### Barber panel
 
 **Login**
@@ -39,6 +43,10 @@ Screens below show the **English (EN)** UI.
 **Calendar, appointments and cancel**
 
 ![Barber panel dashboard](screenshots/barberPanel.png)
+
+**Manual appointment**
+
+![Manual appointment form](screenshots/en_manualAppointment_barberPanel.png)
 
 ## Features
 
