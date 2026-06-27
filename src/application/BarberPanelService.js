@@ -32,7 +32,10 @@ export class BarberPanelService {
 
   getSession() {
     const barberId = sessionStorage.getItem(SESSION_KEY);
-    if (!barberId || !BARBER_LABELS[barberId]) return null;
+    if (!barberId || !BARBER_LABELS[barberId]) {
+      sessionStorage.removeItem(SESSION_KEY);
+      return null;
+    }
 
     return {
       barberId,

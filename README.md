@@ -2,6 +2,36 @@
 
 Erkek kuaförü / berber dükkanları için geliştirilmiş, Türkçe arayüzlü bir randevu yönetim sitesi. Müşteriler online randevu alabilir; berberler ayrı panelden randevularını görüntüleyebilir ve telefonla alınan randevuları manuel ekleyebilir.
 
+## Ekran görüntüleri
+
+### Müşteri sitesi
+
+**Randevu oluşturma**
+
+![Randevu oluşturma formu](docs/screenshots/randevu-formu.png)
+
+**Doldurulmuş randevu formu**
+
+![Doldurulmuş randevu formu](docs/screenshots/randevu-doldurulmus.png)
+
+**Randevu sorgulama ve iptal**
+
+![Randevu sorgulama](docs/screenshots/randevu-sorgulama.png)
+
+### Berber paneli
+
+**Giriş ekranı**
+
+![Berber paneli giriş](docs/screenshots/berber-panel-giris.png)
+
+**Randevu listesi ve takvim**
+
+![Berber paneli dashboard](docs/screenshots/berber-panel-dashboard.png)
+
+**Manuel randevu ekleme**
+
+![Berber paneli manuel randevu](docs/screenshots/berber-panel-manuel-randevu.png)
+
 ## Özellikler
 
 ### Müşteri sitesi (`index.html`)
@@ -131,6 +161,8 @@ barberApp/
 ├── index.html              # Müşteri sitesi
 ├── berber-panel.html       # Berber paneli
 ├── styles.css              # Ortak stiller
+├── docs/
+│   └── screenshots/        # README ekran görüntüleri
 ├── README.md
 └── src/
     ├── main.js             # Müşteri sitesi giriş noktası

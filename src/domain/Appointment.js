@@ -49,11 +49,14 @@ export class Appointment {
   }
 
   static normalizeName(name) {
+    if (!name) return '';
     return name.trim().toLocaleLowerCase('tr-TR').replace(/\s+/g, ' ');
   }
 
   static normalizePhone(phone) {
-    let digits = phone.replace(/\D/g, '');
+    if (!phone) return '';
+
+    let digits = String(phone).replace(/\D/g, '');
 
     if (digits.startsWith('90') && digits.length >= 12) {
       digits = digits.slice(2);

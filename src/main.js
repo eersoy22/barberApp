@@ -38,7 +38,10 @@ function bootstrap() {
   const availabilityService = new AvailabilityService(repository);
   const lookupService = new AppointmentLookupService(
     repository,
-    new LookupFieldsValidation(),
+    new CompositeValidator([
+      new LookupFieldsValidation(),
+      new PhoneValidation(),
+    ]),
     eventBus,
   );
   const bookingFacade = new BookingFacade(

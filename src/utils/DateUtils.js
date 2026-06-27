@@ -19,7 +19,9 @@ export class DateUtils {
   }
 
   static formatDisplayFromIso(isoDate) {
+    if (!isoDate) return '';
     const [y, m, d] = isoDate.split('-').map(Number);
+    if (!y || !m || !d) return isoDate;
     return DateUtils.formatDisplay(new Date(y, m - 1, d));
   }
 
@@ -37,8 +39,13 @@ export class DateUtils {
   }
 
   static isPastAppointment(isoDate, time) {
+    if (!isoDate || !time) return false;
+
     const [year, month, day] = isoDate.split('-').map(Number);
     const [hour, minute] = time.split(':').map(Number);
+
+    if ([year, month, day, hour, minute].some(Number.isNaN)) return false;
+
     const appointmentDate = new Date(year, month - 1, day, hour, minute);
     return appointmentDate < new Date();
   }

@@ -1,7 +1,18 @@
-import { STORAGE_KEY } from '../config/constants.js';
+import { STORAGE_KEY, BARBER_LABELS } from '../config/constants.js';
 import { Appointment } from '../domain/Appointment.js';
 import { DateUtils } from '../utils/DateUtils.js';
 import { IAppointmentRepository } from './IAppointmentRepository.js';
+
+const LEGACY_BARBER_ID_MAP = {
+  ahmet: 'mehmet',
+  can: 'ramazan',
+};
+
+const LEGACY_BARBER_NAME_MAP = {
+  'Ahmet Yılmaz': 'mehmet',
+  'Mehmet Kaya': 'mehmet',
+  'Can Demir': 'ramazan',
+};
 
 /**
  * GOF — Singleton
@@ -22,13 +33,38 @@ export class LocalStorageAppointmentRepository extends IAppointmentRepository {
       const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       let migrated = false;
 
-      const appointments = raw.map((item) => {
+      const parsed = raw
+        .filter((item) => item && typeof item === 'object')
+        .map((item) => {
         if (!item.id) {
           migrated = true;
           item.id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
         }
+
+        item.phone = item.phone ?? '';
+        item.name = item.name ?? '';
+        item.date = item.date ?? '';
+        item.time = item.time ?? '';
+
+        if (item.barberId && LEGACY_BARBER_ID_MAP[item.barberId]) {
+          migrated = true;
+          item.barberId = LEGACY_BARBER_ID_MAP[item.barberId];
+          item.barber = BARBER_LABELS[item.barberId];
+        } else if (!item.barberId && LEGACY_BARBER_NAME_MAP[item.barber]) {
+          migrated = true;
+          item.barberId = LEGACY_BARBER_NAME_MAP[item.barber];
+          item.barber = BARBER_LABELS[item.barberId];
+        } else if (item.barberId && BARBER_LABELS[item.barberId]) {
+          item.barber = BARBER_LABELS[item.barberId];
+        }
+
         return Appointment.fromJSON(item);
       });
+
+      const appointments = parsed.filter((appointment) => appointment.date && appointment.time);
+      if (appointments.length !== parsed.length) {
+        migrated = true;
+      }
 
       if (migrated) {
         this.#persist(appointments);
