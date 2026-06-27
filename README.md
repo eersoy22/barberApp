@@ -201,19 +201,34 @@ barberApp/
 
 ## Mimari (GOF & GRASP)
 
-Proje katmanlı ve desen odaklı yapılandırılmıştır:
+Proje katmanlı ve desen odaklı yapılandırılmıştır.
+
+### GOF (Gang of Four)
 
 | Desen | Kullanım |
 |-------|----------|
-| **Singleton** | `EventBus`, `LocalStorageAppointmentRepository` |
-| **Factory** | `AppointmentFactory` |
-| **Observer** | `EventBus` — randevu değişikliklerinde UI güncelleme |
-| **Strategy** | Telefon, zorunlu alan, müsaitlik doğrulamaları |
-| **Composite** | `CompositeValidator` |
-| **Facade** | `BookingFacade`, `BarberPanelFacade` |
-| **Repository** | `IAppointmentRepository` — depolama soyutlaması |
-| **Controller** | Form controller'ları |
-| **Information Expert** | `Appointment` — çakışma ve müşteri eşleştirme |
+| **Singleton** | `EventBus`, `LocalStorageAppointmentRepository`, `I18n` |
+| **Factory Method** | `AppointmentFactory` — form verisinden `Appointment` üretimi |
+| **Observer** | `EventBus` — randevu ve dil değişikliklerinde UI güncelleme |
+| **Strategy** | `RequiredFieldsValidation`, `PhoneValidation`, `SlotAvailabilityValidation` vb. |
+| **Composite** | `CompositeValidator` — birden fazla doğrulama kuralını tek akışta birleştirir |
+| **Facade** | `BookingFacade`, `BarberPanelFacade` — UI için sadeleştirilmiş arayüz |
+
+### GRASP
+
+| İlke | Kullanım |
+|------|----------|
+| **Information Expert** | `Appointment` — çakışma, müşteri eşleştirme, telefon doğrulama; `TimeSlot` — müsaitlik durumu |
+| **Creator** | `AppointmentFactory` — randevu nesnesini oluşturma sorumluluğu |
+| **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`; uygulama katmanında `AppointmentService` |
+| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `LocalStorageAppointmentRepository` |
+| **Protected Variations** | `IAppointmentRepository` — depolama detayını (`localStorage`) soyutlar |
+
+### Depolama
+
+| Kavram | Kullanım |
+|--------|----------|
+| **Repository** | `IAppointmentRepository` / `LocalStorageAppointmentRepository` — randevu verisi erişimi |
 
 ## Yapılandırma
 

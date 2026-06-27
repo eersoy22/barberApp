@@ -195,17 +195,34 @@ barberApp/
 
 ## Architecture (GOF & GRASP)
 
+The project uses a layered, pattern-oriented structure. The UI layer separates `*View.js` (presentation) from `*Controller.js` (event flow).
+
+### GOF (Gang of Four)
+
 | Pattern | Usage |
 |---------|--------|
-| **Singleton** | `EventBus`, `LocalStorageAppointmentRepository` |
-| **Factory** | `AppointmentFactory` |
-| **Observer** | `EventBus` — UI updates on appointment changes |
-| **Strategy** | Phone, required fields, slot validation |
-| **Composite** | `CompositeValidator` |
-| **Facade** | `BookingFacade`, `BarberPanelFacade` |
-| **Repository** | `IAppointmentRepository` — storage abstraction |
-| **Controller** | Form controllers |
-| **Information Expert** | `Appointment` — conflicts and customer matching |
+| **Singleton** | `EventBus`, `LocalStorageAppointmentRepository`, `I18n` |
+| **Factory Method** | `AppointmentFactory` — builds `Appointment` from form data |
+| **Observer** | `EventBus` — UI updates on appointment and language changes |
+| **Strategy** | `RequiredFieldsValidation`, `PhoneValidation`, `SlotAvailabilityValidation`, etc. |
+| **Composite** | `CompositeValidator` — combines multiple validation rules in one flow |
+| **Facade** | `BookingFacade`, `BarberPanelFacade` — simplified interface for the UI |
+
+### GRASP
+
+| Principle | Usage |
+|-----------|--------|
+| **Information Expert** | `Appointment` — conflicts, customer matching, phone validation; `TimeSlot` — availability state |
+| **Creator** | `AppointmentFactory` — responsible for creating appointment objects |
+| **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`; application-layer `AppointmentService` |
+| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `LocalStorageAppointmentRepository` |
+| **Protected Variations** | `IAppointmentRepository` — abstracts storage details (`localStorage`) |
+
+### Storage
+
+| Concept | Usage |
+|---------|--------|
+| **Repository** | `IAppointmentRepository` / `LocalStorageAppointmentRepository` — appointment data access |
 
 ## Configuration
 
