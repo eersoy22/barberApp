@@ -6,33 +6,39 @@ Erkek kuaförü / berber dükkanları için geliştirilmiş randevu yönetim sit
 
 ## Ekran görüntüleri
 
+Aşağıdaki görseller **Türkçe (TR)** arayüzü gösterir.
+
 ### Müşteri sitesi
+
+**Bilgi**
+
+![Bilgi ekranı](docs/screenshots/tr_bilgiekrani.png)
+
+**Hizmetler**
+
+![Hizmetler](docs/screenshots/tr_hizmetlerimiz.png)
 
 **Randevu oluşturma**
 
-![Randevu oluşturma formu](docs/screenshots/randevu-formu.png)
+![Randevu oluşturma formu](docs/screenshots/tr_musteri_randevu.png)
 
 **Doldurulmuş randevu formu**
 
-![Doldurulmuş randevu formu](docs/screenshots/randevu-doldurulmus.png)
+![Doldurulmuş randevu formu](docs/screenshots/tr_musteri_randevu_dolu.png)
 
 **Randevu sorgulama ve iptal**
 
-![Randevu sorgulama](docs/screenshots/randevu-sorgulama.png)
+![Randevu sorgulama](docs/screenshots/tr_musteri_randevu_takip.png)
 
 ### Berber paneli
 
 **Giriş ekranı**
 
-![Berber paneli giriş](docs/screenshots/berber-panel-giris.png)
+![Berber paneli giriş](docs/screenshots/tr_berberPanel_giris.png)
 
-**Randevu listesi ve takvim**
+**Takvim, randevu listesi ve iptal**
 
-![Berber paneli dashboard](docs/screenshots/berber-panel-dashboard.png)
-
-**Manuel randevu ekleme**
-
-![Berber paneli manuel randevu](docs/screenshots/berber-panel-manuel-randevu.png)
+![Berber paneli dashboard](docs/screenshots/tr_berberPanel.png)
 
 ## Özellikler
 

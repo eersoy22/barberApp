@@ -6,33 +6,39 @@ A barber shop appointment website with Turkish and English customer-facing UI. C
 
 ## Screenshots
 
+Screens below show the **English (EN)** UI.
+
 ### Customer site
+
+**About**
+
+![About screen](screenshots/en_aboutUsScreen.png)
+
+**Services**
+
+![Services](screenshots/en_ourServices.png)
 
 **Book appointment**
 
-![Appointment form](screenshots/randevu-formu.png)
+![Appointment form](screenshots/en_barberCustomer_Booking_empty.png)
 
 **Filled appointment form**
 
-![Filled appointment form](screenshots/randevu-doldurulmus.png)
+![Filled appointment form](screenshots/en_barberCustomer_Booking.png)
 
 **Lookup and cancel**
 
-![Appointment lookup](screenshots/randevu-sorgulama.png)
+![Appointment lookup](screenshots/en_appointmentTracking_customer.png)
 
 ### Barber panel
 
 **Login**
 
-![Barber panel login](screenshots/berber-panel-giris.png)
+![Barber panel login](screenshots/barberPanel_signIn.png)
 
-**Calendar and appointment list**
+**Calendar, appointments and cancel**
 
-![Barber panel dashboard](screenshots/berber-panel-dashboard.png)
-
-**Manual appointment**
-
-![Manual appointment form](screenshots/berber-panel-manuel-randevu.png)
+![Barber panel dashboard](screenshots/barberPanel.png)
 
 ## Features
 
@@ -53,6 +59,7 @@ A barber shop appointment website with Turkish and English customer-facing UI. C
 - **TR / EN** language switcher (shared with customer site)
 - Monthly **calendar** (days with appointments highlighted)
 - Appointment list (filter by day)
+- **Cancel appointments** from the panel
 - **Manual booking** for phone appointments
 - Manual entries appear as booked on the customer site
 
