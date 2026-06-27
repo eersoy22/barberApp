@@ -179,10 +179,8 @@ Dükkan adı, adres, telefon ve fiyatlar `index.html` içinden düzenlenebilir. 
 ## Önemli notlar
 
 - Veriler yalnızca **aynı tarayıcının** `localStorage` alanında tutulur; farklı cihaz veya tarayıcılar birbirini görmez.
-- Berber PIN doğrulaması demo amaçlıdır; gerçek ortamda sunucu tarafı kimlik doğrulama gerekir.
 - Pazar günleri randevu alınamaz; geçmiş randevular otomatik temizlenir.
 - Müşteri randevusunda telefon zorunludur; berber manuel randevusunda telefon isteğe bağlıdır.
-
 ## Lisans
 
 Bu proje demo amaçlı geliştirilmiştir.
