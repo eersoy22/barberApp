@@ -4,7 +4,7 @@ import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Pure Fabrication
- * Berber paneli iş kuralları.
+ * Barber panel business rules.
  */
 export class BarberPanelService {
   constructor(repository, eventBus = EventBus.getInstance()) {

@@ -4,7 +4,7 @@ import { IAppointmentRepository } from './IAppointmentRepository.js';
 
 /**
  * GRASP — Pure Fabrication
- * SQLite API üzerinden randevu erişimi.
+ * Appointment access via SQLite API.
  */
 export class ApiAppointmentRepository extends IAppointmentRepository {
   static #instance = null;

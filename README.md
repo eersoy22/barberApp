@@ -4,6 +4,8 @@
 
 Erkek kuaförü / berber dükkanları için geliştirilmiş randevu yönetim sitesi. **TR / EN** dil desteği (müşteri sitesi ve berber paneli). Müşteriler online randevu alabilir; berberler ayrı panelden randevularını görüntüleyebilir ve telefonla alınan randevuları manuel ekleyebilir.
 
+**Canlı demo:** [https://eersoy-barber.vercel.app/](https://eersoy-barber.vercel.app/) · Berber paneli: [/berber-panel.html](https://eersoy-barber.vercel.app/berber-panel.html)
+
 ## Ekran görüntüleri
 
 Aşağıdaki görseller **Türkçe (TR)** arayüzü gösterir.
@@ -74,13 +76,18 @@ Aşağıdaki görseller **Türkçe (TR)** arayüzü gösterir.
 
 - HTML5, CSS3
 - Vanilla JavaScript (ES Modules)
-- Node.js + Express — API sunucusu
-- SQLite — randevu veritabanı (`server/data/barber.db`)
+- **Supabase** (PostgreSQL) — canlı ortam veritabanı (Vercel)
+- Node.js + Express + SQLite — yerel geliştirme (`npm start`)
+- `localStorage` — yalnızca dil tercihi (`appLanguage`)
 - `sessionStorage` — berber oturumu (tarayıcıda)
 
-Frontend için harici framework veya build aracı kullanılmaz. Randevu verileri artık **SQLite veritabanında** saklanır; tüm cihazlar aynı sunucuya bağlandığında aynı randevuları görür.
+Frontend için React/Vue gibi framework kullanılmaz. Canlı sitede randevular **Supabase** üzerinde kalıcı olarak saklanır.
 
-## GitHub'dan indirip çalıştırma
+## Canlı site (Vercel + Supabase)
+
+Proje [Vercel](https://vercel.com) üzerinde yayınlanır; randevu verisi [Supabase](https://supabase.com) PostgreSQL veritabanında tutulur.
+
+## Yerel geliştirme (opsiyonel)
 
 ### 1. Projeyi indirin
 
@@ -93,7 +100,7 @@ cd barberApp
 
 **Seçenek B — ZIP indirme:**
 
-GitHub sayfasında **Code → Download ZIP** deyin, arşivi açın ve proje klasörüne girin.
+GitHub sayfasında **Code → Download ZIP** tıklayın, arşivi açın ve proje klasörüne girin.
 
 ### 2. Bağımlılıkları kurun
 
@@ -134,14 +141,7 @@ Sunucu çalışırken tarayıcıda şu adreslere gidin:
 2. **Randevularım** bölümünden ad ve telefon ile sorgulayın
 3. Footer'daki **Berber Paneli** linkinden panele girin (ör. Mehmet İmrek — PIN: `1111`)
 
-### Sık karşılaşılan sorunlar
 
-| Sorun | Çözüm |
-|-------|--------|
-| `npm` bulunamadı | [nodejs.org](https://nodejs.org/) adresinden Node.js kurun |
-| Sayfa boş / modül hatası | Dosyayı çift tıklamayın; `npm start` ile sunucuyu başlatıp `http://localhost:8080` üzerinden açın |
-| "Sunucuya bağlanılamadı" hatası | `npm start` çalışıyor olmalı; Python `http.server` veya Live Server **yeterli değildir** (API gerekir) |
-| Randevular kayboldu | Eski `localStorage` verileri otomatik taşınmaz; yeni randevular `server/data/barber.db` dosyasında saklanır |
 
 ## Berber paneli giriş bilgileri (demo)
 
@@ -160,33 +160,39 @@ barberApp/
 ├── index.html              # Müşteri sitesi
 ├── berber-panel.html       # Berber paneli
 ├── styles.css              # Ortak stiller
-├── package.json            # Node.js bağımlılıkları
-├── server/                 # Express API + SQLite
+├── env.js                  # Supabase bağlantı bilgileri (deploy'da üretilir)
+├── env.example.js          # env.js şablonu
+├── vercel.json             # Vercel deploy ayarları
+├── package.json
+├── scripts/
+│   └── generate-env.js     # env.js üretici (build)
+├── supabase/
+│   └── schema.sql          # PostgreSQL tablo + RLS
+├── server/                 # Yerel geliştirme (Express + SQLite)
 │   ├── index.js
 │   ├── db.js
-│   ├── routes/
-│   │   └── appointments.js
-│   └── data/               # barber.db (otomatik oluşur)
+│   └── routes/
+│       └── appointments.js
 ├── docs/
-│   ├── README.en.md        # İngilizce dokümantasyon
-│   └── screenshots/        # README ekran görüntüleri
+│   ├── README.en.md
+│   └── screenshots/
 ├── README.md
 └── src/
     ├── main.js             # Müşteri sitesi giriş noktası
     ├── panel-main.js       # Berber paneli giriş noktası
-    ├── i18n/               # TR/EN çeviriler (müşteri sitesi + berber paneli)
     ├── config/
-    │   └── constants.js    # Sabitler, berber PIN'leri
-    ├── domain/             # Domain modelleri
-    ├── application/        # İş kuralları, Facade
-    ├── infrastructure/     # Repository (SQLite API)
-    ├── patterns/           # Factory, Observer (EventBus)
-    ├── validation/         # Strategy, Composite doğrulama
-    ├── presentation/       # MVC — sunum katmanı
-    │   ├── views/          # View (DOM, render)
-    │   └── controllers/    # Controller (olay akışı)
+    │   ├── constants.js
+    │   └── env.js          # Ortam okuma yardımcısı
+    ├── domain/
+    ├── application/
+    ├── infrastructure/     # Repository katmanı
+    ├── patterns/
+    ├── validation/
+    ├── presentation/
+    │   ├── views/
+    │   └── controllers/
+    ├── i18n/
     └── utils/
-        └── DateUtils.js
 ```
 
 ## Mimari (MVC, GOF & GRASP)
@@ -207,7 +213,7 @@ Proje katmanlı ve desen odaklı yapılandırılmıştır. Bağımlılıklar `ma
 
 | Desen | Kullanım |
 |-------|----------|
-| **Singleton** | `EventBus`, `ApiAppointmentRepository`, `I18n` |
+| **Singleton** | `EventBus`, `SupabaseAppointmentRepository`, `ApiAppointmentRepository`, `I18n` |
 | **Factory Method** | `AppointmentFactory` — form verisinden `Appointment` üretimi |
 | **Observer** | `EventBus` — randevu ve dil değişikliklerinde UI güncelleme |
 | **Strategy** | `RequiredFieldsValidation`, `PhoneValidation`, `SlotAvailabilityValidation` vb. |
@@ -220,17 +226,18 @@ Proje katmanlı ve desen odaklı yapılandırılmıştır. Bağımlılıklar `ma
 |------|----------|
 | **Information Expert** | `Appointment` — çakışma, müşteri eşleştirme, telefon doğrulama; `TimeSlot` — müsaitlik durumu |
 | **Creator** | `AppointmentFactory` — randevu nesnesini oluşturma sorumluluğu |
-| **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`; uygulama katmanında `AppointmentService` |
-| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `ApiAppointmentRepository` |
-| **Protected Variations** | `IAppointmentRepository` — depolama detayını (SQLite API) soyutlar |
+| **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`, `TimeSlotPresenter`; uygulama katmanında `AppointmentService` |
+| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `SupabaseAppointmentRepository`, `ApiAppointmentRepository` |
+| **Protected Variations** | `IAppointmentRepository` — depolama detayını (Supabase / Express API) soyutlar |
 
 ### Depolama
 
-| Kavram | Kullanım |
-|--------|----------|
-| **Repository** | `IAppointmentRepository` / `ApiAppointmentRepository` — randevu verisi erişimi |
-| **Veritabanı** | SQLite (`server/data/barber.db`) — kalıcı randevu kayıtları |
-| **API** | Express REST (`/api/appointments`) — frontend ↔ veritabanı |
+| Ortam | Repository | Veritabanı |
+|-------|------------|------------|
+| **Vercel** | `SupabaseAppointmentRepository` | Supabase (PostgreSQL) |
+| **Yerel (`npm start`)** | `ApiAppointmentRepository` | SQLite (`server/data/barber.db`) |
+
+`createAppointmentRepository()` ortam değişkenlerine göre otomatik seçim yapar.
 
 ## Yapılandırma
 
@@ -247,9 +254,12 @@ Dükkan adı, adres, telefon ve fiyatlar `index.html` içinden düzenlenebilir. 
 
 ## Önemli notlar
 
-- Randevular **SQLite veritabanında** saklanır (`server/data/barber.db`). Sunucu çalıştığı sürece tüm tarayıcılar aynı veriyi görür.
+- **Canlı sitede** randevular Supabase PostgreSQL veritabanında kalıcı olarak saklanır.
+- **Yerel geliştirmede** randevular SQLite dosyasında tutulur (`server/data/barber.db`).
+- Dil tercihi tarayıcının `localStorage` alanında saklanır; berber oturumu `sessionStorage` kullanır.
 - Pazar günleri randevu alınamaz; geçmiş randevular otomatik temizlenir.
 - Müşteri randevusunda telefon zorunludur; berber manuel randevusunda telefon isteğe bağlıdır.
+
 ## Lisans
 
 Bu proje demo amaçlı geliştirilmiştir.

@@ -5,7 +5,7 @@ import { withNetworkHandling } from '../../utils/NetworkUtils.js';
 
 /**
  * GRASP — Controller
- * Telefonla alınan randevuların manuel girilmesi.
+ * Manual entry for phone-booked appointments.
  */
 export class BarberManualAppointmentController {
   constructor(form, datePicker, timeSlotPresenter, panelFacade, toastView, eventBus, onCreated) {

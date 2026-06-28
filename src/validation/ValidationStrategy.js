@@ -1,6 +1,6 @@
 /**
  * GOF — Strategy
- * Doğrulama algoritmalarını değiştirilebilir kılar.
+ * Makes validation algorithms interchangeable.
  */
 import { Appointment } from '../domain/Appointment.js';
 import { i18n } from '../i18n/I18n.js';
@@ -114,7 +114,7 @@ export class LookupFieldsValidation extends ValidationStrategy {
 
 /**
  * GOF — Composite
- * Birden fazla doğrulama stratejisini tek arayüzde birleştirir.
+ * Combines multiple validation strategies behind a single interface.
  */
 export class CompositeValidator extends ValidationStrategy {
   constructor(strategies = []) {

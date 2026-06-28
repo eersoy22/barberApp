@@ -1,7 +1,7 @@
 import { i18n } from '../../i18n/I18n.js';
 
 /**
- * View — yalnızca DOM render; veri application katmanından gelir.
+ * View — DOM rendering only; data comes from the application layer.
  */
 export class TimeSlotView {
   constructor(selectElement, hintElement) {

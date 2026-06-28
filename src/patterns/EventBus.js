@@ -1,6 +1,6 @@
 /**
  * GOF — Observer
- * GRASP — Pure Fabrication (olay yayını)
+ * GRASP — Pure Fabrication (event broadcasting)
  */
 export class EventBus {
   static #instance = null;

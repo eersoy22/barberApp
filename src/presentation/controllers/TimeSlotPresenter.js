@@ -2,7 +2,7 @@ import { i18n } from '../../i18n/I18n.js';
 
 /**
  * GRASP — Controller
- * TimeSlotView ile BookingFacade arasındaki koordinasyonu yönetir.
+ * Manages coordination between TimeSlotView and BookingFacade.
  */
 export class TimeSlotPresenter {
   constructor(view, bookingFacade) {

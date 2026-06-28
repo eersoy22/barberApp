@@ -6,7 +6,7 @@ import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Pure Fabrication
- * Müsaitlik hesaplama sorumluluğu.
+ * Availability calculation responsibility.
  */
 export class AvailabilityService {
   constructor(repository) {
@@ -33,8 +33,8 @@ export class AvailabilityService {
 }
 
 /**
- * GRASP — Controller (uygulama katmanı)
- * Randevu iş kurallarını yönetir.
+ * GRASP — Controller (application layer)
+ * Manages appointment business rules.
  */
 export class AppointmentService {
   constructor(repository, validator, eventBus = EventBus.getInstance()) {
@@ -73,7 +73,7 @@ export class AppointmentService {
 
 /**
  * GRASP — Pure Fabrication
- * Randevu sorgulama iş kuralları.
+ * Appointment lookup business rules.
  */
 export class AppointmentLookupService {
   constructor(repository, validator, eventBus = EventBus.getInstance()) {
@@ -117,7 +117,7 @@ export class AppointmentLookupService {
 
 /**
  * GOF — Facade
- * UI katmanı için basitleştirilmiş randevu arayüzü.
+ * Simplified appointment interface for the UI layer.
  */
 export class BookingFacade {
   constructor(appointmentService, availabilityService, lookupService = null) {

@@ -3,9 +3,9 @@ import { ApiAppointmentRepository } from './ApiAppointmentRepository.js';
 import { SupabaseAppointmentRepository } from './SupabaseAppointmentRepository.js';
 
 /**
- * Composition Root helper — ortama göre repository seçer.
- * Supabase env varsa: Vercel/Netlify (statik)
- * Yoksa: yerel Express API (/api)
+ * Composition Root helper — selects repository based on environment.
+ * When Supabase env vars are set: Vercel (static)
+ * Otherwise: local Express API (/api)
  */
 export function createAppointmentRepository() {
   if (useSupabase()) {

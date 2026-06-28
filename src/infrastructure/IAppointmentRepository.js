@@ -1,6 +1,6 @@
 /**
  * GRASP — Protected Variations
- * Depolama detaylarını soyutlar (Repository).
+ * Abstracts storage details (Repository).
  */
 export class IAppointmentRepository {
   findAll() {

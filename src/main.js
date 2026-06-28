@@ -26,7 +26,7 @@ import { AppointmentLookupController } from './presentation/controllers/Appointm
 import { I18nView } from './presentation/views/I18nView.js';
 
 /**
- * Composition Root — bağımlılıkları bir araya getirir.
+ * Composition Root — wires dependencies together.
  */
 function bootstrap() {
   const repository = createAppointmentRepository();

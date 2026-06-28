@@ -2,7 +2,7 @@ import { BARBER_LABELS } from '../config/constants.js';
 
 /**
  * GRASP — Information Expert
- * Randevu çakışma bilgisini kendi taşır.
+ * Carries appointment conflict information.
  */
 export class Appointment {
   constructor({

@@ -4,7 +4,7 @@ import { i18n } from '../i18n/I18n.js';
 
 /**
  * GOF — Factory Method
- * GRASP — Creator (Appointment nesnesini oluşturma sorumluluğu)
+ * GRASP — Creator (responsible for creating Appointment objects)
  */
 export class AppointmentFactory {
   static createFromFormData(formData) {

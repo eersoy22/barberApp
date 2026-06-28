@@ -1,4 +1,4 @@
--- Supabase SQL Editor'da çalıştırın.
+-- Run in Supabase SQL Editor.
 
 create table if not exists appointments (
   id text primary key,

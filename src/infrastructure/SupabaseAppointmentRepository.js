@@ -6,7 +6,7 @@ import { IAppointmentRepository } from './IAppointmentRepository.js';
 
 /**
  * GRASP — Pure Fabrication
- * Supabase (PostgreSQL) üzerinden randevu erişimi — Vercel/Netlify uyumlu.
+ * Appointment access via Supabase (PostgreSQL) — Vercel-compatible.
  */
 export class SupabaseAppointmentRepository extends IAppointmentRepository {
   static #instance = null;

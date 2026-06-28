@@ -4,6 +4,8 @@
 
 A barber shop appointment website with Turkish and English customer-facing UI. Customers can book online; barbers manage appointments from a separate panel and add phone bookings manually.
 
+**Live demo:** [https://eersoy-barber.vercel.app/](https://eersoy-barber.vercel.app/) · Barber panel: [/berber-panel.html](https://eersoy-barber.vercel.app/berber-panel.html)
+
 ## Screenshots
 
 Screens below show the **English (EN)** UI.
@@ -75,12 +77,18 @@ Screens below show the **English (EN)** UI.
 
 - HTML5, CSS3
 - Vanilla JavaScript (ES Modules)
-- `localStorage` — appointment data (browser-only)
-- `sessionStorage` — barber session
+- **Supabase** (PostgreSQL) — production database (Vercel)
+- Node.js + Express + SQLite — local development (`npm start`)
+- `localStorage` — language preference only (`appLanguage`)
+- `sessionStorage` — barber session (browser)
 
-No external framework or build step. **No install required** — download and run a local server.
+No React/Vue or similar frontend framework. On the live site, appointments are stored persistently in **Supabase**.
 
-## Run from GitHub
+## Production (Vercel + Supabase)
+
+The app is deployed on [Vercel](https://vercel.com); appointment data lives in a [Supabase](https://supabase.com) PostgreSQL database.
+
+## Local development (optional)
 
 ### 1. Download the project
 
@@ -95,43 +103,27 @@ cd barberApp
 
 On GitHub: **Code → Download ZIP**, extract, and open the project folder.
 
-### 2. Why a local server?
+### 2. Install dependencies
 
-The app uses JavaScript **ES modules** (`import` / `export`). Opening `index.html` directly (`file://`) **will not work**. You need a small local HTTP server.
-
-### 3. Start a local server
-
-From the project folder, use **one** of these:
-
-#### Option 1 — Python
+[Node.js](https://nodejs.org/) (v18+ recommended) is required:
 
 ```bash
-python -m http.server 8080
+npm install
 ```
 
-On some systems:
+### 3. Start the server
 
 ```bash
-python3 -m http.server 8080
+npm start
 ```
 
-#### Option 2 — Node.js
+This starts the Express API, creates the SQLite database, and serves static files (customer site + barber panel).
+
+For auto-restart during development:
 
 ```bash
-npx serve .
+npm run dev
 ```
-
-or:
-
-```bash
-npx http-server -p 8080
-```
-
-#### Option 3 — VS Code / Cursor Live Server
-
-1. Open the project in your editor
-2. Install the **Live Server** extension
-3. Right-click `index.html` → **Open with Live Server**
 
 ### 4. Open in the browser
 
@@ -140,21 +132,13 @@ npx http-server -p 8080
 | Customer site | [http://localhost:8080](http://localhost:8080) |
 | Barber panel | [http://localhost:8080/berber-panel.html](http://localhost:8080/berber-panel.html) |
 
-> If `npx serve` uses another port (e.g. 3000), use the URL shown in the terminal.
+> Change the port with `PORT=3000 npm start` (Windows PowerShell: `$env:PORT=3000; npm start`).
 
 ### 5. Quick test
 
 1. Book an appointment on the customer site
 2. Look it up under **My Appointments** with the same name and phone
 3. Open **Barber Panel** from the footer (e.g. Mehmet İmrek — PIN: `1111`)
-
-### Troubleshooting
-
-| Issue | Fix |
-|-------|-----|
-| `python` not found | Install Python 3 from [python.org](https://www.python.org/downloads/) or use `npx serve` |
-| Blank page / module error | Do not double-click the HTML file; use `http://localhost:...` |
-| Appointments missing | Data lives in the browser `localStorage`; another browser or incognito window uses separate data |
 
 ## Barber panel demo login
 
@@ -173,26 +157,39 @@ barberApp/
 ├── index.html              # Customer site
 ├── berber-panel.html       # Barber panel
 ├── styles.css              # Shared styles
+├── env.js                  # Supabase credentials (generated on deploy)
+├── env.example.js          # env.js template
+├── vercel.json             # Vercel deploy config
+├── package.json
+├── scripts/
+│   └── generate-env.js     # env.js generator (build)
+├── supabase/
+│   └── schema.sql          # PostgreSQL table + RLS
+├── server/                 # Local dev (Express + SQLite)
+│   ├── index.js
+│   ├── db.js
+│   └── routes/
+│       └── appointments.js
 ├── docs/
-│   ├── README.en.md        # English documentation (this file)
-│   └── screenshots/        # README screenshots
-├── README.md               # Turkish documentation (GitHub default)
+│   ├── README.en.md
+│   └── screenshots/
+├── README.md
 └── src/
     ├── main.js             # Customer site entry
     ├── panel-main.js       # Barber panel entry
-    ├── i18n/               # TR/EN translations (customer site + barber panel)
     ├── config/
-    │   └── constants.js    # Constants, barber PINs
+    │   ├── constants.js
+    │   └── env.js          # Environment helper
     ├── domain/
     ├── application/
-    ├── infrastructure/
+    ├── infrastructure/     # Repository layer
     ├── patterns/
     ├── validation/
-    ├── presentation/       # MVC — presentation layer
-    │   ├── views/          # View (DOM, render)
-    │   └── controllers/    # Controller (event flow)
+    ├── presentation/
+    │   ├── views/
+    │   └── controllers/
+    ├── i18n/
     └── utils/
-        └── DateUtils.js
 ```
 
 ## Architecture (MVC, GOF & GRASP)
@@ -213,7 +210,7 @@ Business rules live in `application/` (Service, Facade), not in the Model. Contr
 
 | Pattern | Usage |
 |---------|--------|
-| **Singleton** | `EventBus`, `LocalStorageAppointmentRepository`, `I18n` |
+| **Singleton** | `EventBus`, `SupabaseAppointmentRepository`, `ApiAppointmentRepository`, `I18n` |
 | **Factory Method** | `AppointmentFactory` — builds `Appointment` from form data |
 | **Observer** | `EventBus` — UI updates on appointment and language changes |
 | **Strategy** | `RequiredFieldsValidation`, `PhoneValidation`, `SlotAvailabilityValidation`, etc. |
@@ -226,32 +223,37 @@ Business rules live in `application/` (Service, Facade), not in the Model. Contr
 |-----------|--------|
 | **Information Expert** | `Appointment` — conflicts, customer matching, phone validation; `TimeSlot` — availability state |
 | **Creator** | `AppointmentFactory` — responsible for creating appointment objects |
-| **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`; application-layer `AppointmentService` |
-| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `LocalStorageAppointmentRepository` |
-| **Protected Variations** | `IAppointmentRepository` — abstracts storage details (`localStorage`) |
+| **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`, `TimeSlotPresenter`; application-layer `AppointmentService` |
+| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `SupabaseAppointmentRepository`, `ApiAppointmentRepository` |
+| **Protected Variations** | `IAppointmentRepository` — abstracts storage (Supabase / Express API) |
 
 ### Storage
 
-| Concept | Usage |
-|---------|--------|
-| **Repository** | `IAppointmentRepository` / `LocalStorageAppointmentRepository` — appointment data access |
+| Environment | Repository | Database |
+|-------------|------------|----------|
+| **Vercel** | `SupabaseAppointmentRepository` | Supabase (PostgreSQL) |
+| **Local (`npm start`)** | `ApiAppointmentRepository` | SQLite (`server/data/barber.db`) |
+
+`createAppointmentRepository()` picks the implementation based on environment variables.
 
 ## Configuration
 
 In `src/config/constants.js`:
 
-- `SERVICE_LABELS` — Service names (legacy)
+- `SERVICE_LABELS` — Service names
 - `BARBER_LABELS` — Barber names
 - `BARBER_PINS` — Panel login PINs
 - `TIME_SLOTS` — Hours (09:00–19:00)
 
-Customer-facing copy and prices can be edited in `index.html` and `src/i18n/translations.js`. Barber names are in `BARBER_LABELS`.
+Customer-facing copy and prices can be edited in `index.html`. Barber names are in `BARBER_LABELS`.
 
 **Shop address:** Maslak Mahallesi, Çınar Sokak, No: 1, Sarıyer / İstanbul
 
 ## Notes
 
-- Data is stored only in the **same browser’s** `localStorage`; other devices or browsers do not share it.
+- On the **live site**, appointments are stored persistently in Supabase PostgreSQL.
+- In **local development**, appointments are stored in SQLite (`server/data/barber.db`).
+- Language preference uses browser `localStorage`; barber session uses `sessionStorage`.
 - Sundays are closed for booking; past appointments are cleaned up automatically.
 - Phone is required for customer bookings; optional for manual barber bookings.
 

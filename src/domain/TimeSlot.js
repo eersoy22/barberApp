@@ -2,7 +2,7 @@ import { i18n } from '../i18n/I18n.js';
 
 /**
  * GRASP — Information Expert
- * Saat diliminin müsaitlik durumunu kendi bilir.
+ * Knows the availability state of a time slot.
  */
 export class TimeSlot {
   constructor(time, isBooked = false) {

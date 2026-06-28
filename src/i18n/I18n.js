@@ -8,7 +8,7 @@ import {
 
 /**
  * GOF — Singleton
- * Uygulama genelinde dil yönetimi.
+ * Application-wide language management.
  */
 export class I18n {
   static #instance = null;

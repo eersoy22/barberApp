@@ -5,7 +5,7 @@ import { withNetworkHandling } from '../../utils/NetworkUtils.js';
 
 /**
  * GRASP — Controller
- * Sistem olaylarını (form gönderimi) koordine eder.
+ * Coordinates system events (form submission).
  */
 export class AppointmentFormController {
   constructor(form, datePicker, timeSlotPresenter, bookingFacade, toastView, eventBus) {

@@ -1,6 +1,6 @@
 /**
- * Vercel/Netlify deploy: scripts/generate-env.js bu dosyayı üretir.
- * Yerel geliştirme: env.example.js dosyasını env.js olarak kopyalayın.
+ * Vercel deploy: scripts/generate-env.js generates this file.
+ * Local dev: copy env.example.js to env.js.
  */
 export function getEnv() {
   if (typeof window !== 'undefined' && window.__ENV__) {
