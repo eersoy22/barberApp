@@ -115,4 +115,16 @@ function bootstrap() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', bootstrap);
+function start() {
+  try {
+    bootstrap();
+  } catch (error) {
+    console.error('Uygulama başlatılamadı:', error);
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', start);
+} else {
+  start();
+}

@@ -46,7 +46,7 @@ export class DatePickerView {
       if (this.popup.hidden) return;
       if (this.trigger.contains(e.target) || this.popup.contains(e.target)) return;
       this.close();
-    });
+    }, true);
   }
 
   getValue() {
@@ -136,6 +136,7 @@ export class DatePickerView {
 
   close() {
     this.popup.hidden = true;
+    this.popup.setAttribute('hidden', '');
     this.trigger.setAttribute('aria-expanded', 'false');
   }
 
