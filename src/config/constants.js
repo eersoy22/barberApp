@@ -1,4 +1,4 @@
-export const STORAGE_KEY = 'appointments';
+export const API_BASE_URL = '/api';
 export const LANG_KEY = 'appLanguage';
 
 export const TIME_SLOTS = [

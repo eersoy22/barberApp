@@ -13,17 +13,22 @@ export class AvailabilityService {
     this.repository = repository;
   }
 
-  getTimeSlots(date, barberId) {
+  async getTimeSlots(date, barberId) {
     if (!date || !barberId) return [];
 
-    return TIME_SLOTS.map((time) => {
-      const isBooked = this.repository.isSlotBooked(date, barberId, time);
-      return new TimeSlot(time, isBooked);
-    });
+    const slots = await Promise.all(
+      TIME_SLOTS.map(async (time) => {
+        const isBooked = await this.repository.isSlotBooked(date, barberId, time);
+        return new TimeSlot(time, isBooked);
+      }),
+    );
+
+    return slots;
   }
 
-  getAvailableCount(date, barberId) {
-    return this.getTimeSlots(date, barberId).filter((slot) => slot.isAvailable).length;
+  async getAvailableCount(date, barberId) {
+    const slots = await this.getTimeSlots(date, barberId);
+    return slots.filter((slot) => slot.isAvailable).length;
   }
 }
 
@@ -38,14 +43,22 @@ export class AppointmentService {
     this.eventBus = eventBus;
   }
 
-  book(formData) {
-    const validation = this.validator.validate(formData);
+  async book(formData) {
+    const validation = await this.validator.validate(formData);
     if (!validation.valid) {
       return { success: false, message: validation.message };
     }
 
     const appointment = AppointmentFactory.createFromFormData(formData);
-    this.repository.save(appointment);
+
+    try {
+      await this.repository.save(appointment);
+    } catch (error) {
+      if (error.status === 409 || error.code === 'SLOT_TAKEN') {
+        return { success: false, message: i18n.t('validation.slotTaken') };
+      }
+      throw error;
+    }
 
     this.eventBus.publish(APP_EVENTS.APPOINTMENT_CREATED, appointment);
     this.eventBus.publish(APP_EVENTS.APPOINTMENTS_CHANGED, null);
@@ -53,7 +66,7 @@ export class AppointmentService {
     return { success: true, appointment };
   }
 
-  isSlotBooked(date, barberId, time) {
+  async isSlotBooked(date, barberId, time) {
     return this.repository.isSlotBooked(date, barberId, time);
   }
 }
@@ -69,23 +82,23 @@ export class AppointmentLookupService {
     this.eventBus = eventBus;
   }
 
-  findByCustomer(name, phone) {
-    const validation = this.validator.validate({ name, phone });
+  async findByCustomer(name, phone) {
+    const validation = await this.validator.validate({ name, phone });
     if (!validation.valid) {
       return { success: false, message: validation.message, appointments: [] };
     }
 
-    const appointments = this.repository.findByCustomer(name, phone);
+    const appointments = await this.repository.findByCustomer(name, phone);
     return { success: true, appointments };
   }
 
-  cancel(id, name, phone) {
-    const validation = this.validator.validate({ name, phone });
+  async cancel(id, name, phone) {
+    const validation = await this.validator.validate({ name, phone });
     if (!validation.valid) {
       return { success: false, message: validation.message };
     }
 
-    const appointment = this.repository.findById(id);
+    const appointment = await this.repository.findById(id);
     if (!appointment) {
       return { success: false, message: i18n.t('validation.appointmentNotFound') };
     }
@@ -94,7 +107,7 @@ export class AppointmentLookupService {
       return { success: false, message: i18n.t('validation.cancelForbidden') };
     }
 
-    this.repository.deleteById(id);
+    await this.repository.deleteById(id);
     this.eventBus.publish(APP_EVENTS.APPOINTMENT_CANCELLED, appointment);
     this.eventBus.publish(APP_EVENTS.APPOINTMENTS_CHANGED, null);
 
@@ -113,24 +126,24 @@ export class BookingFacade {
     this.lookupService = lookupService;
   }
 
-  createAppointment(formData) {
+  async createAppointment(formData) {
     return this.appointmentService.book(formData);
   }
 
-  getAvailableTimeSlots(date, barberId) {
+  async getAvailableTimeSlots(date, barberId) {
     return this.availabilityService.getTimeSlots(date, barberId);
   }
 
-  getAvailableCount(date, barberId) {
+  async getAvailableCount(date, barberId) {
     return this.availabilityService.getAvailableCount(date, barberId);
   }
 
-  getAvailabilityHint(date, barberId) {
+  async getAvailabilityHint(date, barberId) {
     if (!date || !barberId) {
       return i18n.t('appointment.selectBarberDate');
     }
 
-    const availableCount = this.availabilityService.getAvailableCount(date, barberId);
+    const availableCount = await this.availabilityService.getAvailableCount(date, barberId);
 
     if (availableCount === 0) {
       return i18n.t('timeslot.noSlots');
@@ -139,14 +152,14 @@ export class BookingFacade {
     return i18n.t('timeslot.available', { count: availableCount });
   }
 
-  lookupAppointments(name, phone) {
+  async lookupAppointments(name, phone) {
     if (!this.lookupService) {
       return { success: false, message: i18n.t('validation.lookupUnavailable'), appointments: [] };
     }
     return this.lookupService.findByCustomer(name, phone);
   }
 
-  cancelAppointment(id, name, phone) {
+  async cancelAppointment(id, name, phone) {
     if (!this.lookupService) {
       return { success: false, message: i18n.t('validation.cancelUnavailable') };
     }

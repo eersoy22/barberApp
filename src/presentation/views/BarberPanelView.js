@@ -15,6 +15,7 @@ export class BarberPanelView {
     this.calendarView = elements.calendarView;
 
     this.allAppointments = [];
+    this.visibleAppointments = [];
     this.selectedDate = null;
     this.currentBarberName = '';
     this.onCancel = null;
@@ -33,23 +34,19 @@ export class BarberPanelView {
     this.welcomeTitle.textContent = i18n.t('panel.welcome', { name: barberName });
   }
 
-  renderAppointments(appointments, selectedDate = null, onCancel = null) {
+  renderAppointments(allAppointments, selectedDate, visibleAppointments, onCancel = null) {
     this.onCancel = onCancel ?? this.onCancel;
-    this.allAppointments = appointments;
+    this.allAppointments = allAppointments;
     this.selectedDate = selectedDate;
+    this.visibleAppointments = visibleAppointments;
 
-    this.statsTotal.textContent = appointments.length;
+    this.statsTotal.textContent = allAppointments.length;
 
-    this.calendarView.setAppointments(appointments);
+    this.calendarView.setAppointments(allAppointments);
     this.calendarView.setSelectedDate(selectedDate);
 
     this.updateListTitle();
-    this.renderList(this.getFilteredAppointments());
-  }
-
-  getFilteredAppointments() {
-    if (!this.selectedDate) return this.allAppointments;
-    return this.allAppointments.filter((a) => a.date === this.selectedDate);
+    this.renderList(visibleAppointments);
   }
 
   updateListTitle() {
@@ -120,11 +117,12 @@ export class BarberPanelView {
     });
   }
 
-  selectDate(isoDate) {
-    this.selectedDate = isoDate;
-    this.calendarView.setSelectedDate(isoDate);
+  updateSelectedDate(selectedDate, visibleAppointments) {
+    this.selectedDate = selectedDate;
+    this.visibleAppointments = visibleAppointments;
+    this.calendarView.setSelectedDate(selectedDate);
     this.updateListTitle();
-    this.renderList(this.getFilteredAppointments());
+    this.renderList(visibleAppointments);
   }
 
   refreshLanguage() {
@@ -132,9 +130,8 @@ export class BarberPanelView {
       this.welcomeTitle.textContent = i18n.t('panel.welcome', { name: this.currentBarberName });
     }
     if (this.allAppointments.length > 0) {
-      this.renderAppointments(this.allAppointments, this.selectedDate, this.onCancel);
-    } else {
       this.updateListTitle();
+      this.renderList(this.visibleAppointments);
     }
   }
 

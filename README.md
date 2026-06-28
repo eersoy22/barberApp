@@ -74,10 +74,11 @@ Aşağıdaki görseller **Türkçe (TR)** arayüzü gösterir.
 
 - HTML5, CSS3
 - Vanilla JavaScript (ES Modules)
-- `localStorage` — randevu verisi (tarayıcıda saklanır)
-- `sessionStorage` — berber oturumu
+- Node.js + Express — API sunucusu
+- SQLite — randevu veritabanı (`server/data/barber.db`)
+- `sessionStorage` — berber oturumu (tarayıcıda)
 
-Harici framework veya build aracı kullanılmaz. **Kurulum gerekmez** — indirip yerel sunucu ile açmanız yeterli.
+Frontend için harici framework veya build aracı kullanılmaz. Randevu verileri artık **SQLite veritabanında** saklanır; tüm cihazlar aynı sunucuya bağlandığında aynı randevuları görür.
 
 ## GitHub'dan indirip çalıştırma
 
@@ -94,48 +95,27 @@ cd barberApp
 
 GitHub sayfasında **Code → Download ZIP** deyin, arşivi açın ve proje klasörüne girin.
 
-### 2. Neden sunucu gerekli?
+### 2. Bağımlılıkları kurun
 
-Proje JavaScript **ES modülleri** (`import` / `export`) kullanır. `index.html` dosyasını doğrudan çift tıklayıp açmak (`file://`) **çalışmaz**. Küçük bir yerel HTTP sunucusu başlatmanız gerekir.
-
-### 3. Yerel sunucuyu başlatın
-
-Proje klasöründe aşağıdaki yöntemlerden **birini** kullanın.
-
-#### Yöntem 1 — Python (en yaygın)
-
-Python 3 yüklüyse:
+[Node.js](https://nodejs.org/) (v18 veya üzeri önerilir) yüklü olmalıdır:
 
 ```bash
-# Windows / macOS / Linux
-python -m http.server 8080
+npm install
 ```
 
-Bazı sistemlerde:
+### 3. Sunucuyu başlatın
 
 ```bash
-python3 -m http.server 8080
+npm start
 ```
 
-#### Yöntem 2 — Node.js
+Bu komut Express API sunucusunu başlatır, SQLite veritabanını oluşturur ve statik dosyaları (müşteri sitesi + berber paneli) sunar.
 
-Node.js yüklüyse:
+Geliştirme sırasında dosya değişikliklerinde sunucuyu otomatik yeniden başlatmak için:
 
 ```bash
-npx serve .
+npm run dev
 ```
-
-veya:
-
-```bash
-npx http-server -p 8080
-```
-
-#### Yöntem 3 — VS Code / Cursor Live Server
-
-1. Projeyi editörde açın
-2. **Live Server** eklentisini kurun
-3. `index.html` üzerinde sağ tık → **Open with Live Server**
 
 ### 4. Tarayıcıda açın
 
@@ -146,7 +126,7 @@ Sunucu çalışırken tarayıcıda şu adreslere gidin:
 | Müşteri sitesi | [http://localhost:8080](http://localhost:8080) |
 | Berber paneli | [http://localhost:8080/berber-panel.html](http://localhost:8080/berber-panel.html) |
 
-> `npx serve` farklı bir port kullanıyorsa (ör. 3000), terminalde yazan adresi kullanın.
+> Portu değiştirmek için `PORT=3000 npm start` kullanın (Windows PowerShell: `$env:PORT=3000; npm start`).
 
 ### 5. Hızlı test
 
@@ -158,9 +138,10 @@ Sunucu çalışırken tarayıcıda şu adreslere gidin:
 
 | Sorun | Çözüm |
 |-------|--------|
-| `python` bulunamadı | [python.org](https://www.python.org/downloads/) adresinden Python 3 kurun veya Node.js ile `npx serve` kullanın |
-| Sayfa boş / modül hatası | Dosyayı çift tıklamayın; mutlaka `http://localhost:...` üzerinden açın |
-| Randevular görünmüyor | Veriler tarayıcının `localStorage` alanındadır; farklı tarayıcı veya gizli sekme farklı veri gösterir |
+| `npm` bulunamadı | [nodejs.org](https://nodejs.org/) adresinden Node.js kurun |
+| Sayfa boş / modül hatası | Dosyayı çift tıklamayın; `npm start` ile sunucuyu başlatıp `http://localhost:8080` üzerinden açın |
+| "Sunucuya bağlanılamadı" hatası | `npm start` çalışıyor olmalı; Python `http.server` veya Live Server **yeterli değildir** (API gerekir) |
+| Randevular kayboldu | Eski `localStorage` verileri otomatik taşınmaz; yeni randevular `server/data/barber.db` dosyasında saklanır |
 
 ## Berber paneli giriş bilgileri (demo)
 
@@ -179,6 +160,13 @@ barberApp/
 ├── index.html              # Müşteri sitesi
 ├── berber-panel.html       # Berber paneli
 ├── styles.css              # Ortak stiller
+├── package.json            # Node.js bağımlılıkları
+├── server/                 # Express API + SQLite
+│   ├── index.js
+│   ├── db.js
+│   ├── routes/
+│   │   └── appointments.js
+│   └── data/               # barber.db (otomatik oluşur)
 ├── docs/
 │   ├── README.en.md        # İngilizce dokümantasyon
 │   └── screenshots/        # README ekran görüntüleri
@@ -191,7 +179,7 @@ barberApp/
     │   └── constants.js    # Sabitler, berber PIN'leri
     ├── domain/             # Domain modelleri
     ├── application/        # İş kuralları, Facade
-    ├── infrastructure/     # Repository (localStorage)
+    ├── infrastructure/     # Repository (SQLite API)
     ├── patterns/           # Factory, Observer (EventBus)
     ├── validation/         # Strategy, Composite doğrulama
     ├── presentation/       # MVC — sunum katmanı
@@ -219,7 +207,7 @@ Proje katmanlı ve desen odaklı yapılandırılmıştır. Bağımlılıklar `ma
 
 | Desen | Kullanım |
 |-------|----------|
-| **Singleton** | `EventBus`, `LocalStorageAppointmentRepository`, `I18n` |
+| **Singleton** | `EventBus`, `ApiAppointmentRepository`, `I18n` |
 | **Factory Method** | `AppointmentFactory` — form verisinden `Appointment` üretimi |
 | **Observer** | `EventBus` — randevu ve dil değişikliklerinde UI güncelleme |
 | **Strategy** | `RequiredFieldsValidation`, `PhoneValidation`, `SlotAvailabilityValidation` vb. |
@@ -233,14 +221,16 @@ Proje katmanlı ve desen odaklı yapılandırılmıştır. Bağımlılıklar `ma
 | **Information Expert** | `Appointment` — çakışma, müşteri eşleştirme, telefon doğrulama; `TimeSlot` — müsaitlik durumu |
 | **Creator** | `AppointmentFactory` — randevu nesnesini oluşturma sorumluluğu |
 | **Controller** | `AppointmentFormController`, `AppointmentLookupController`, `BarberPanelController`, `BarberManualAppointmentController`; uygulama katmanında `AppointmentService` |
-| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `LocalStorageAppointmentRepository` |
-| **Protected Variations** | `IAppointmentRepository` — depolama detayını (`localStorage`) soyutlar |
+| **Pure Fabrication** | `EventBus`, `AvailabilityService`, `AppointmentLookupService`, `BarberPanelService`, `ApiAppointmentRepository` |
+| **Protected Variations** | `IAppointmentRepository` — depolama detayını (SQLite API) soyutlar |
 
 ### Depolama
 
 | Kavram | Kullanım |
 |--------|----------|
-| **Repository** | `IAppointmentRepository` / `LocalStorageAppointmentRepository` — randevu verisi erişimi |
+| **Repository** | `IAppointmentRepository` / `ApiAppointmentRepository` — randevu verisi erişimi |
+| **Veritabanı** | SQLite (`server/data/barber.db`) — kalıcı randevu kayıtları |
+| **API** | Express REST (`/api/appointments`) — frontend ↔ veritabanı |
 
 ## Yapılandırma
 
@@ -257,7 +247,7 @@ Dükkan adı, adres, telefon ve fiyatlar `index.html` içinden düzenlenebilir. 
 
 ## Önemli notlar
 
-- Veriler yalnızca **aynı tarayıcının** `localStorage` alanında tutulur; farklı cihaz veya tarayıcılar birbirini görmez.
+- Randevular **SQLite veritabanında** saklanır (`server/data/barber.db`). Sunucu çalıştığı sürece tüm tarayıcılar aynı veriyi görür.
 - Pazar günleri randevu alınamaz; geçmiş randevular otomatik temizlenir.
 - Müşteri randevusunda telefon zorunludur; berber manuel randevusunda telefon isteğe bağlıdır.
 ## Lisans

@@ -85,8 +85,8 @@ export class SlotAvailabilityValidation extends ValidationStrategy {
     this.repository = repository;
   }
 
-  validate(formData) {
-    const isBooked = this.repository.isSlotBooked(
+  async validate(formData) {
+    const isBooked = await this.repository.isSlotBooked(
       formData.date,
       formData.barberId,
       formData.time,
@@ -126,9 +126,9 @@ export class CompositeValidator extends ValidationStrategy {
     this.strategies.push(strategy);
   }
 
-  validate(formData) {
+  async validate(formData) {
     for (const strategy of this.strategies) {
-      const result = strategy.validate(formData);
+      const result = await strategy.validate(formData);
       if (!result.valid) return result;
     }
     return { valid: true };

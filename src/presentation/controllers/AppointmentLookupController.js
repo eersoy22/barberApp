@@ -1,6 +1,7 @@
 import { DateUtils } from '../../utils/DateUtils.js';
 import { APP_EVENTS } from '../../config/constants.js';
 import { i18n } from '../../i18n/I18n.js';
+import { withNetworkHandling } from '../../utils/NetworkUtils.js';
 
 /**
  * GRASP — Controller

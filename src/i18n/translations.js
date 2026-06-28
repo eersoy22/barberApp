@@ -99,6 +99,7 @@ export const translations = {
       email: 'E-posta',
       hours: 'Çalışma Saatleri',
       hoursShort: 'Pzt–Cum: 09:00–20:00<br>Cmt: 09:00–18:00',
+      sentToast: 'Mesajınız gönderildi! En kısa sürede dönüş yapacağız.',
     },
     footer: {
       desc: 'Profesyonel erkek kuaförü ve berber hizmetleri.',
@@ -148,6 +149,7 @@ export const translations = {
       months: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
     },
     timeslot: {
+      loading: 'Müsait saatler yükleniyor...',
       booked: '(Dolu)',
       noSlots: 'Bu berber için seçilen günde müsait saat kalmadı.',
       available: '{count} müsait saat var. Dolu saatler seçilemez.',
@@ -169,6 +171,7 @@ export const translations = {
       cancelForbidden: 'Bu randevuyu iptal etme yetkiniz yok.',
       lookupUnavailable: 'Sorgulama servisi kullanılamıyor.',
       cancelUnavailable: 'İptal servisi kullanılamıyor.',
+      networkError: 'Sunucuya bağlanılamadı. Lütfen sunucunun çalıştığından emin olun.',
     },
   },
   en: {
@@ -271,6 +274,7 @@ export const translations = {
       email: 'Email',
       hours: 'Opening Hours',
       hoursShort: 'Mon–Fri: 09:00–20:00<br>Sat: 09:00–18:00',
+      sentToast: 'Your message was sent! We will get back to you soon.',
     },
     footer: {
       desc: 'Professional men\'s barber and grooming services.',
@@ -320,6 +324,7 @@ export const translations = {
       months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     },
     timeslot: {
+      loading: 'Loading available times...',
       booked: '(Booked)',
       noSlots: 'No available slots for this barber on the selected day.',
       available: '{count} slot(s) available. Booked times cannot be selected.',
@@ -341,6 +346,7 @@ export const translations = {
       cancelForbidden: 'You are not allowed to cancel this appointment.',
       lookupUnavailable: 'Lookup service unavailable.',
       cancelUnavailable: 'Cancel service unavailable.',
+      networkError: 'Could not connect to the server. Please make sure it is running.',
     },
   },
 };

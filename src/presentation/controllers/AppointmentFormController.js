@@ -1,16 +1,17 @@
 import { APP_EVENTS } from '../../config/constants.js';
 import { DateUtils } from '../../utils/DateUtils.js';
 import { i18n } from '../../i18n/I18n.js';
+import { withNetworkHandling } from '../../utils/NetworkUtils.js';
 
 /**
  * GRASP — Controller
  * Sistem olaylarını (form gönderimi) koordine eder.
  */
 export class AppointmentFormController {
-  constructor(form, datePicker, timeSlotView, bookingFacade, toastView, eventBus) {
+  constructor(form, datePicker, timeSlotPresenter, bookingFacade, toastView, eventBus) {
     this.form = form;
     this.datePicker = datePicker;
-    this.timeSlotView = timeSlotView;
+    this.timeSlotPresenter = timeSlotPresenter;
     this.bookingFacade = bookingFacade;
     this.toastView = toastView;
     this.eventBus = eventBus;
@@ -31,20 +32,19 @@ export class AppointmentFormController {
 
     this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
       this.datePicker.rerender();
-      this.refreshTimeSlots();
+      void this.timeSlotPresenter.rerender();
     });
   }
 
   refreshTimeSlots() {
-    const previousTime = this.timeSlotView.getValue();
-    this.timeSlotView.refresh(
+    void this.timeSlotPresenter.refresh(
       this.datePicker.getValue(),
       this.barberSelect.value,
-      previousTime,
+      this.timeSlotPresenter.getValue(),
     );
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
 
     const formData = {
@@ -53,7 +53,7 @@ export class AppointmentFormController {
       serviceId: this.form.querySelector('#service').value,
       barberId: this.barberSelect.value,
       date: this.datePicker.getValue(),
-      time: this.timeSlotView.getValue(),
+      time: this.timeSlotPresenter.getValue(),
       note: this.form.querySelector('#note').value,
     };
 
@@ -63,7 +63,12 @@ export class AppointmentFormController {
       return;
     }
 
-    const result = this.bookingFacade.createAppointment(formData);
+    const result = await withNetworkHandling(
+      () => this.bookingFacade.createAppointment(formData),
+      this.toastView,
+    );
+
+    if (!result) return;
 
     if (!result.success) {
       this.toastView.show(result.message);

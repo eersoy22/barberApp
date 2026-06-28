@@ -1,22 +1,23 @@
 import { DateUtils } from '../../utils/DateUtils.js';
 import { APP_EVENTS } from '../../config/constants.js';
 import { i18n } from '../../i18n/I18n.js';
+import { withNetworkHandling } from '../../utils/NetworkUtils.js';
 
 /**
  * GRASP — Controller
  * Telefonla alınan randevuların manuel girilmesi.
  */
 export class BarberManualAppointmentController {
-  constructor(form, datePicker, timeSlotView, panelFacade, toastView, eventBus, onCreated) {
+  constructor(form, datePicker, timeSlotPresenter, panelFacade, toastView, eventBus, onCreated) {
     this.form = form;
     this.datePicker = datePicker;
-    this.timeSlotView = timeSlotView;
+    this.timeSlotPresenter = timeSlotPresenter;
     this.panelFacade = panelFacade;
     this.toastView = toastView;
     this.eventBus = eventBus;
     this.onCreated = onCreated;
 
-    this.timeSlotView.missingDateHint = i18n.t('appointment.selectDateFirst');
+    this.timeSlotPresenter.setMissingDateHint(i18n.t('appointment.selectDateFirst'));
     this.bindEvents();
   }
 
@@ -29,7 +30,7 @@ export class BarberManualAppointmentController {
   }
 
   onLanguageChange() {
-    this.timeSlotView.missingDateHint = i18n.t('appointment.selectDateFirst');
+    this.timeSlotPresenter.setMissingDateHint(i18n.t('appointment.selectDateFirst'));
     this.datePicker.rerender();
     this.refreshTimeSlots();
   }
@@ -39,10 +40,10 @@ export class BarberManualAppointmentController {
   }
 
   refreshTimeSlots() {
-    this.timeSlotView.refresh(
+    void this.timeSlotPresenter.refresh(
       this.datePicker.getValue(),
       this.getBarberId(),
-      this.timeSlotView.getValue(),
+      this.timeSlotPresenter.getValue(),
     );
   }
 
@@ -52,7 +53,7 @@ export class BarberManualAppointmentController {
     this.refreshTimeSlots();
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
 
     const session = this.panelFacade.getSession();
@@ -80,11 +81,16 @@ export class BarberManualAppointmentController {
       serviceId: this.form.querySelector('#manualService').value,
       barberId: session.barberId,
       date,
-      time: this.timeSlotView.getValue(),
+      time: this.timeSlotPresenter.getValue(),
       note: this.form.querySelector('#manualNote').value,
     };
 
-    const result = this.panelFacade.createManualAppointment(formData);
+    const result = await withNetworkHandling(
+      () => this.panelFacade.createManualAppointment(formData),
+      this.toastView,
+    );
+
+    if (!result) return;
 
     if (!result.success) {
       this.toastView.show(result.message);

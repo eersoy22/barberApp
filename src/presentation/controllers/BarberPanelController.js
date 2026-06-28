@@ -1,6 +1,8 @@
 import { APP_EVENTS } from '../../config/constants.js';
 import { DateUtils } from '../../utils/DateUtils.js';
 import { i18n } from '../../i18n/I18n.js';
+import { withNetworkHandling } from '../../utils/NetworkUtils.js';
+import { BarberPanelService } from '../../application/BarberPanelService.js';
 
 /**
  * GRASP — Controller
@@ -13,6 +15,9 @@ export class BarberPanelController {
     this.eventBus = eventBus;
     this.manualAppointmentController = manualAppointmentController;
 
+    this.allAppointments = [];
+    this.selectedDate = null;
+
     this.loginForm = view.loginForm;
     this.logoutBtn = document.getElementById('logoutBtn');
     this.clearDayBtn = view.clearDayBtn;
@@ -24,10 +29,10 @@ export class BarberPanelController {
   bindEvents() {
     this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
     this.logoutBtn.addEventListener('click', () => this.handleLogout());
-    this.clearDayBtn.addEventListener('click', () => this.view.selectDate(null));
+    this.clearDayBtn.addEventListener('click', () => this.handleDateSelect(null));
 
     this.eventBus.subscribe(APP_EVENTS.APPOINTMENTS_CHANGED, () => {
-      if (this.facade.getSession()) this.loadAppointments();
+      if (this.facade.getSession()) void this.loadAppointments();
     });
 
     this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
@@ -36,11 +41,29 @@ export class BarberPanelController {
     });
   }
 
+  getVisibleAppointments() {
+    return BarberPanelService.filterAppointmentsByDate(this.allAppointments, this.selectedDate);
+  }
+
+  renderCurrentAppointments() {
+    this.view.renderAppointments(
+      this.allAppointments,
+      this.selectedDate,
+      this.getVisibleAppointments(),
+      (id) => this.handleCancel(id),
+    );
+  }
+
+  handleDateSelect(isoDate) {
+    this.selectedDate = isoDate;
+    this.view.updateSelectedDate(isoDate, this.getVisibleAppointments());
+  }
+
   initSession() {
     const session = this.facade.getSession();
     if (session) {
       this.view.showDashboard(session.barberName);
-      this.loadAppointments();
+      void this.loadAppointments();
       this.manualAppointmentController?.refreshTimeSlots();
     } else {
       this.view.showLogin();
@@ -61,37 +84,46 @@ export class BarberPanelController {
     }
 
     this.view.showDashboard(result.barberName);
-    this.loadAppointments();
+    void this.loadAppointments();
     this.manualAppointmentController?.refreshTimeSlots();
     this.toastView.show(i18n.t('panel.loginSuccess', { name: result.barberName }));
   }
 
   handleLogout() {
     this.facade.logout();
+    this.allAppointments = [];
+    this.selectedDate = null;
     this.view.showLogin();
     this.toastView.show(i18n.t('panel.logoutToast'));
   }
 
-  loadAppointments() {
-    const result = this.facade.getMyAppointments();
+  async loadAppointments() {
+    const result = await withNetworkHandling(
+      () => this.facade.getMyAppointments(),
+      this.toastView,
+    );
+
+    if (!result) return;
 
     if (!result.success) {
       this.view.showLogin();
       return;
     }
 
-    this.view.renderAppointments(
-      result.appointments,
-      this.view.selectedDate,
-      (id) => this.handleCancel(id),
-    );
+    this.allAppointments = result.appointments;
+    this.renderCurrentAppointments();
   }
 
-  handleCancel(appointmentId) {
+  async handleCancel(appointmentId) {
     const confirmed = window.confirm(i18n.t('lookup.cancelConfirm'));
     if (!confirmed) return;
 
-    const result = this.facade.cancelAppointment(appointmentId);
+    const result = await withNetworkHandling(
+      () => this.facade.cancelAppointment(appointmentId),
+      this.toastView,
+    );
+
+    if (!result) return;
 
     if (!result.success) {
       this.toastView.show(result.message);
@@ -103,7 +135,7 @@ export class BarberPanelController {
       date: dateLabel,
       time: result.appointment.time,
     }));
-    this.loadAppointments();
+    await this.loadAppointments();
     this.manualAppointmentController?.refreshTimeSlots();
   }
 }

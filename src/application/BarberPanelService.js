@@ -46,12 +46,17 @@ export class BarberPanelService {
     };
   }
 
-  getAppointments(barberId) {
+  static filterAppointmentsByDate(appointments, selectedDate) {
+    if (!selectedDate) return appointments;
+    return appointments.filter((appointment) => appointment.date === selectedDate);
+  }
+
+  async getAppointments(barberId) {
     return this.repository.findByBarberId(barberId);
   }
 
-  cancelAppointment(appointmentId, barberId) {
-    const appointment = this.repository.findById(appointmentId);
+  async cancelAppointment(appointmentId, barberId) {
+    const appointment = await this.repository.findById(appointmentId);
     if (!appointment) {
       return { success: false, message: i18n.t('validation.appointmentNotFound') };
     }
@@ -60,7 +65,7 @@ export class BarberPanelService {
       return { success: false, message: i18n.t('validation.cancelForbidden') };
     }
 
-    this.repository.deleteById(appointmentId);
+    await this.repository.deleteById(appointmentId);
     this.eventBus.publish(APP_EVENTS.APPOINTMENT_CANCELLED, appointment);
     this.eventBus.publish(APP_EVENTS.APPOINTMENTS_CHANGED, null);
 
@@ -89,17 +94,17 @@ export class BarberPanelFacade {
     return this.panelService.getSession();
   }
 
-  getMyAppointments() {
+  async getMyAppointments() {
     const session = this.panelService.getSession();
     if (!session) {
       return { success: false, message: i18n.t('validation.sessionNotFound'), appointments: [] };
     }
 
-    const appointments = this.panelService.getAppointments(session.barberId);
+    const appointments = await this.panelService.getAppointments(session.barberId);
     return { success: true, appointments, barberName: session.barberName };
   }
 
-  createManualAppointment(formData) {
+  async createManualAppointment(formData) {
     const session = this.panelService.getSession();
     if (!session) {
       return { success: false, message: i18n.t('validation.sessionNotFound') };
@@ -111,7 +116,7 @@ export class BarberPanelFacade {
     });
   }
 
-  cancelAppointment(appointmentId) {
+  async cancelAppointment(appointmentId) {
     const session = this.panelService.getSession();
     if (!session) {
       return { success: false, message: i18n.t('validation.sessionNotFound') };

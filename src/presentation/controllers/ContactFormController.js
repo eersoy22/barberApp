@@ -1,3 +1,5 @@
+import { i18n } from '../../i18n/I18n.js';
+
 /**
  * GRASP — Controller
  */
@@ -11,7 +13,7 @@ export class ContactFormController {
   bindEvents() {
     this.form.addEventListener('submit', (e) => {
       e.preventDefault();
-      this.toastView.show('Mesajınız gönderildi! En kısa sürede dönüş yapacağız.');
+      this.toastView.show(i18n.t('contact.sentToast'));
       this.form.reset();
     });
   }
