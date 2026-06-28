@@ -32,11 +32,19 @@ export class AppointmentLookupController {
     };
   }
 
-  refreshResults() {
-    const result = this.bookingFacade.lookupAppointments(
-      this.lastSearch.name,
-      this.lastSearch.phone,
+  async refreshResults() {
+    const result = await withNetworkHandling(
+      () => this.bookingFacade.lookupAppointments(
+        this.lastSearch.name,
+        this.lastSearch.phone,
+      ),
+      this.toastView,
     );
+
+    if (!result) {
+      this.lookupView.clear();
+      return;
+    }
 
     if (!result.success) {
       this.lookupView.clear();
@@ -46,13 +54,21 @@ export class AppointmentLookupController {
     this.lookupView.render(result.appointments, (id) => this.handleCancel(id));
   }
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
 
     const { name, phone } = this.getSearchCredentials();
     this.lastSearch = { name, phone };
 
-    const result = this.bookingFacade.lookupAppointments(name, phone);
+    const result = await withNetworkHandling(
+      () => this.bookingFacade.lookupAppointments(name, phone),
+      this.toastView,
+    );
+
+    if (!result) {
+      this.lookupView.clear();
+      return;
+    }
 
     if (!result.success) {
       this.toastView.show(result.message);
@@ -69,15 +85,20 @@ export class AppointmentLookupController {
     }
   }
 
-  handleCancel(appointmentId) {
+  async handleCancel(appointmentId) {
     const confirmed = window.confirm(i18n.t('lookup.cancelConfirm'));
     if (!confirmed) return;
 
-    const result = this.bookingFacade.cancelAppointment(
-      appointmentId,
-      this.lastSearch.name,
-      this.lastSearch.phone,
+    const result = await withNetworkHandling(
+      () => this.bookingFacade.cancelAppointment(
+        appointmentId,
+        this.lastSearch.name,
+        this.lastSearch.phone,
+      ),
+      this.toastView,
     );
+
+    if (!result) return;
 
     if (!result.success) {
       this.toastView.show(result.message);
@@ -89,6 +110,6 @@ export class AppointmentLookupController {
       date: dateLabel,
       time: result.appointment.time,
     }));
-    this.refreshResults();
+    await this.refreshResults();
   }
 }
