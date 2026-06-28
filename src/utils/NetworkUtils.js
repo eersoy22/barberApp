@@ -1,4 +1,4 @@
-import { i18n } from '../../i18n/I18n.js';
+import { i18n } from '../i18n/I18n.js';
 
 export async function withNetworkHandling(action, toastView) {
   try {
