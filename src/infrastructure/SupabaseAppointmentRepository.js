@@ -19,6 +19,7 @@ export class SupabaseAppointmentRepository extends IAppointmentRepository {
   }
 
   constructor() {
+    super();
     const env = getEnv();
     this.supabaseUrl = env.SUPABASE_URL.replace(/\/$/, '');
     this.anonKey = env.SUPABASE_ANON_KEY;

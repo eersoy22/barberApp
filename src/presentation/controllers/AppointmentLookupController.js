@@ -18,7 +18,11 @@ export class AppointmentLookupController {
   }
 
   bindEvents() {
-    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    this.form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      void this.handleSubmit(e);
+    });
 
     this.eventBus.subscribe(APP_EVENTS.LANGUAGE_CHANGED, () => {
       this.lookupView.rerender();
@@ -55,8 +59,6 @@ export class AppointmentLookupController {
   }
 
   async handleSubmit(e) {
-    e.preventDefault();
-
     const { name, phone } = this.getSearchCredentials();
     this.lastSearch = { name, phone };
 
@@ -77,12 +79,17 @@ export class AppointmentLookupController {
     }
 
     this.lookupView.render(result.appointments, (id) => this.handleCancel(id));
+    this.scrollToResults();
 
     if (result.appointments.length === 0) {
       this.toastView.show(i18n.t('lookup.notFoundToast'));
     } else {
       this.toastView.show(i18n.t('lookup.found', { count: result.appointments.length }));
     }
+  }
+
+  scrollToResults() {
+    this.form.closest('#sorgula')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   async handleCancel(appointmentId) {

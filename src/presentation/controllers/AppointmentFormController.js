@@ -22,7 +22,11 @@ export class AppointmentFormController {
   }
 
   bindEvents() {
-    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    this.form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      void this.handleSubmit(e);
+    });
 
     this.barberSelect.addEventListener('change', () => this.refreshTimeSlots());
 
@@ -45,8 +49,6 @@ export class AppointmentFormController {
   }
 
   async handleSubmit(e) {
-    e.preventDefault();
-
     const formData = {
       name: this.form.querySelector('#name').value,
       phone: this.form.querySelector('#phone').value,

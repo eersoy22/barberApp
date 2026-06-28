@@ -127,7 +127,7 @@
           <h2 data-i18n="appointment.title">Randevu Oluştur</h2>
         </div>
         <div class="appointment-wrapper">
-          <form class="appointment-form" id="appointmentForm">
+          <form class="appointment-form" id="appointmentForm" action="#randevu" novalidate>
             <div class="form-row">
               <div class="form-group">
                 <label for="name" data-i18n="appointment.name">Ad Soyad</label>
@@ -220,7 +220,7 @@
           <h2 data-i18n="lookup.title">Randevularımı Sorgula</h2>
         </div>
         <div class="lookup-wrapper">
-          <form class="lookup-form" id="lookupForm">
+          <form class="lookup-form" id="lookupForm" action="#sorgula" novalidate>
             <div class="form-row">
               <div class="form-group">
                 <label for="lookupName" data-i18n="appointment.name">Ad Soyad</label>
@@ -302,6 +302,6 @@
 
   <script>window.__ENV__ = window.__ENV__ || {};</script>
   <script src="env.js"></script>
-  <script type="module" src="src/main.js?v=7"></script>
+  <script type="module" src="src/main.js?v=9"></script>
 </body>
 </html>
