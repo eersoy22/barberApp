@@ -161,9 +161,9 @@
             </div>
             <div class="form-row">
               <div class="form-group date-picker">
-                <label for="date" data-i18n="appointment.date">Tarih</label>
+                <label id="dateLabel" data-i18n="appointment.date">Tarih</label>
                 <div class="date-picker-wrap" id="datePicker">
-                  <button type="button" class="date-picker-trigger" id="dateTrigger" aria-haspopup="dialog" aria-expanded="false">
+                  <button type="button" class="date-picker-trigger" id="dateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="dateLabel">
                     <span class="date-picker-value" id="dateDisplay">Tarih seçin</span>
                     <span class="date-picker-icon" aria-hidden="true">📅</span>
                   </button>
@@ -300,6 +300,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <script type="module" src="src/main.js"></script>
+  <script type="module" src="src/main.js?v=3"></script>
 </body>
 </html>

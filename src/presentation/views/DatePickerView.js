@@ -24,6 +24,7 @@ export class DatePickerView {
 
   bindEvents() {
     this.trigger.addEventListener('click', (e) => {
+      e.preventDefault();
       e.stopPropagation();
       if (this.popup.hidden) this.open();
       else this.close();
@@ -41,10 +42,10 @@ export class DatePickerView {
       this.render();
     });
 
-    this.popup.addEventListener('click', (e) => e.stopPropagation());
-
-    document.addEventListener('click', () => {
-      if (!this.popup.hidden) this.close();
+    document.addEventListener('click', (e) => {
+      if (this.popup.hidden) return;
+      if (this.trigger.contains(e.target) || this.popup.contains(e.target)) return;
+      this.close();
     });
   }
 
@@ -129,6 +130,7 @@ export class DatePickerView {
     }
     this.render();
     this.popup.hidden = false;
+    this.popup.removeAttribute('hidden');
     this.trigger.setAttribute('aria-expanded', 'true');
   }
 
